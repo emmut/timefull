@@ -1,0 +1,10 @@
+{
+  "name": "timefull",
+  "version": "1.0.0",
+  "description": "An electron based productivity timer",
+  "main": "main.js",
+  "repository": "http://emmut.github.com",
+  "author": "emmut",
+  "license": "MIT",
+  "private": true
+}
