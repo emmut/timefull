@@ -8,6 +8,9 @@ import { Settings } from './routes/Settings';
 // navigation
 import { Nav } from './components/Nav';
 
+// fontawesome
+import './plugins/fontawesome';
+
 export function App() {
   return (
     <Router>
