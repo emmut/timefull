@@ -1,12 +1,25 @@
-import React from 'react'
+import React from 'react';
+import { MemoryRouter as Router, Route } from 'react-router-dom';
+
+// routes
+import { Home } from './routes/Home';
+import { Settings } from './routes/Settings';
+
+// navigation
+import { Nav } from './components/Nav';
 
 export function App() {
   return (
-    <div>
-      <h1>This is a function component</h1>
-      <button onClick={() => {
-          electron.notificationApi.sendNotification({title: "Pause", body: "It's time to pause"});
-      }}>Notify</button>
-    </div>
-  )
+    <Router>
+      <div>
+        <Route exact path="/">
+          <Home />
+        </Route>
+        <Route path="/settings">
+          <Settings />
+        </Route>
+      </div>
+      <Nav />
+    </Router>
+  );
 }
