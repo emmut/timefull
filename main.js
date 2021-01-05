@@ -12,19 +12,22 @@ function createBrowserWindow() {
       nodeIntegration: false,
       worldSafeExecuteJavaScript: true,
       contextIsolation: true,
-      preload: path.join(__dirname, 'preload.js'),
-    },
+      preload: path.join(__dirname, 'preload.js')
+    }
   });
 
+  // load file to initialize react
   mainWindow.loadFile('index.html');
 
-  const mainMenu = Menu.buildFromTemplate(template);
+  // build main menu
+  const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
+  Menu.setApplicationMenu(mainMenu);
 }
 
 // reload on save
 if (isDev) {
   require('electron-reload')(__dirname, {
-    electron: path.join(__dirname, 'node_modules', '.bin', 'electron'),
+    electron: path.join(__dirname, 'node_modules', '.bin', 'electron')
   });
 }
 
@@ -33,7 +36,7 @@ ipcMain.on('notify', (event, { title, body }) => {
   new Notification({ title, body }).show();
 });
 
-// do close application when all windows are closed, except darwin
+// // do close application when all windows are closed, except darwin
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
@@ -58,26 +61,29 @@ const mainMenuTemplate = [
       {
         label: 'Quit',
         accelerator: 'CmdOrCtrl+Q',
-        click: () => {
+        click() {
           app.quit();
-        },
-      },
-    ],
-  },
+        }
+      }
+    ]
+  }
 ];
 
 // developer menu
 if (isDev) {
-  mainMenuTemplate.push([
-    {
-      label: 'Toggle devtools',
-      accelerator: "CmdOrCtrl+'",
-      click: (item, focusedWindow) => {
-        focusedWindow.toggleDevTools();
+  mainMenuTemplate.push({
+    label: 'Developer tools',
+    submenu: [
+      {
+        label: 'Toggle devtools',
+        accelerator: "CmdOrCtrl+'",
+        click(item, focusedWindow) {
+          focusedWindow.toggleDevTools();
+        }
       },
-    },
-    {
-      role: 'reload',
-    },
-  ]);
+      {
+        role: 'reload'
+      }
+    ]
+  });
 }
