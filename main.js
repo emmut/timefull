@@ -1,4 +1,4 @@
-const { BrowserWindow, app } = require('electron');
+const { BrowserWindow, app, ipcMain, Notification } = require('electron');
 const path = require('path');
 const url = require('url');
 
@@ -23,4 +23,7 @@ require('electron-reload')(__dirname, {
   electron: path.join(__dirname, 'node_modules', '.bin', 'electron')
 })
 
+ipcMain.on('notify', (event, {title, body}) => {
+  new Notification({ title, body }).show();
+});
 app.whenReady().then(createBrowserWindow);
