@@ -6,5 +6,8 @@
   "repository": "http://emmut.github.com",
   "author": "emmut",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "electron": "^11.1.1"
+  }
 }
