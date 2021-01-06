@@ -10,30 +10,39 @@ export function Home() {
   const mmToMs = (mins) => {
     return +mins * 60 * 1000;
   };
-  // TODO: save to localstore
-  const setting = {
-    time: mmToMs(1), // get the time settings
-    interval: mmToMs(5) // get the interval setting
+  const msToMm = (mins) => {
+    return +mins / 60 / 1000;
   };
+  // get options object
+  const settings =
+    JSON.parse(window.localStorage.getItem('MAIN_TIMER_SETTINGS')) || {};
+  let futureTime = settings.time + Date.now();
 
-  // start time
+  // start timer flag
   const [isStarted, setStart] = useState(false);
+  // time state
   const [startTime, setStartTime] = useState(0);
+
+  // initialize time state
+  const [timeLeft, setTimeleft] = useState(calculateTimeLeft(startTime));
 
   // start the timer
   useEffect(() => {
-    let id = null;
+    let timer = null;
     if (isStarted) {
-      setStartTime(setting.time + Date.now());
-      id = setInterval(() => setTimeleft(calculateTimeLeft()), 1000);
+      timer = setInterval(() => {
+        return setTimeleft(calculateTimeLeft(startTime));
+      }, 1000);
     }
-  }, [isStarted]);
+
+    return () => clearInterval(timer);
+  });
 
   // calculate time left
-  const calculateTimeLeft = () => {
+  function calculateTimeLeft(start) {
     let currentTime = Date.now();
-    const endTime = startTime;
-    const difference = currentTime - endTime;
+    const difference = start - currentTime;
+
     let timeLeft = {};
 
     if (difference > 0) {
@@ -43,28 +52,25 @@ export function Home() {
       };
     }
     return timeLeft;
-  };
-
-  // initialize time state
-  const [timeLeft, setTimeleft] = useState(calculateTimeLeft());
-
-  // setTimeout
-  // press start
-
-  // loop untill paused
-  //    start timer
-  //    start pause timer
+  }
 
   return (
     <div>
       <h1>Im home</h1>
-      <ShowIntervals />
-      <button onClick={() => setStart(!isStarted)}>
+      <div className="settings">
+        <span>{settings.time && msToMm(settings.time)}</span>/
+        <span>{settings.time && msToMm(settings.restTime)}</span>
+      </div>
+      <button
+        onClick={() => {
+          setStart(!isStarted);
+          setStartTime(futureTime);
+        }}
+      >
         <FontAwesomeIcon icon={['fas', isStarted ? 'pause' : 'play']} />
       </button>
       {/* display clock */}
-      <ShowTime time={timeLeft} />
-      {console.log(timeLeft)}
+      <ShowTime time={timeLeft} isStarted={isStarted} />
     </div>
   );
 }
