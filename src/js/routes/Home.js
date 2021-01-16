@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
 // components
-import ShowIntervals from '../components/ShowIntervals';
 import ShowTime from '../components/ShowTime';
+// helpers
+import { mmToMs, msToMm, calculateTimeLeft } from '../lib/helpers';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export function Home() {
-  const mmToMs = (mins) => {
-    return +mins * 60 * 1000;
-  };
-  const msToMm = (mins) => {
-    return +mins / 60 / 1000;
-  };
   // get options object
   const settings =
     JSON.parse(window.localStorage.getItem('MAIN_TIMER_SETTINGS')) || {};
@@ -38,29 +33,12 @@ export function Home() {
     return () => clearInterval(timer);
   });
 
-  // calculate time left
-  function calculateTimeLeft(start) {
-    let currentTime = Date.now();
-    const difference = start - currentTime;
-
-    let timeLeft = {};
-
-    if (difference > 0) {
-      timeLeft = {
-        minutes: Math.floor((difference / 60 / 1000) % 60),
-        seconds: Math.floor((difference / 1000) % 60)
-      };
-    }
-    return timeLeft;
-  }
-
   return (
     <div>
-      <h1>Im home</h1>
-      <div className="settings">
+      {/* <div className="settings">
         <span>{settings.time && msToMm(settings.time)}</span>/
         <span>{settings.time && msToMm(settings.restTime)}</span>
-      </div>
+      </div> */}
       <button
         onClick={() => {
           setStart(!isStarted);
