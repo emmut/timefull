@@ -1,4 +1,12 @@
 import React from 'react';
+import styled from 'styled-components';
+
+const Time = styled.div`
+  position: absolute;
+  bottom: -4rem;
+  left: 50%;
+  transform: translate(-50%);
+`;
 
 export default function ShowTime({ time, isStarted }) {
   // format time
@@ -19,8 +27,8 @@ export default function ShowTime({ time, isStarted }) {
     return null;
   }
   return (
-    <div>
+    <Time className="text-large">
       {getMinutes()} : {getSeconds()}
-    </div>
+    </Time>
   );
 }

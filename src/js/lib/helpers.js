@@ -7,6 +7,13 @@ export const msToMm = (mins) => {
   return +mins / 60 / 1000;
 };
 
+export function isObjEmpty(obj) {
+  for (let i in obj) {
+    return false;
+  }
+  return true;
+}
+
 // calculate time left
 export function calculateTimeLeft(start) {
   let currentTime = Date.now();
@@ -23,17 +30,10 @@ export function calculateTimeLeft(start) {
   return timeLeft;
 }
 
-export function isObjEmpty(obj) {
-  for (let i in obj) {
-    return false;
-  }
-  return true;
-}
-
 // Get and sett values to local storeage
 export const localSetting = {
   get(accessKey) {
-    return JSON.parse(window.localStorage.getItem(accessKey));
+    return JSON.parse(window.localStorage.getItem(accessKey)) || {};
   },
   set(accessKey, settingValue) {
     window.localStorage.setItem(accessKey, JSON.stringify(settingValue));

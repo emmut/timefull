@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MemoryRouter as Router, Route } from 'react-router-dom';
+import styled from 'styled-components';
 
 // routes
 import { Home } from './routes/Home';
@@ -14,10 +15,18 @@ import './plugins/fontawesome';
 // helpers
 import { isObjEmpty, localSetting, shadeColor } from './lib/helpers';
 
-//
+import WebFont from 'webfontloader';
+
+WebFont.load({
+  google: {
+    families: ['Nunito:300,400,700', 'sans-serif']
+  }
+});
+
+// default
 const defaultSettings = {
-  time: 5000, // time default setting
-  restTime: 20000, // rest time default setting
+  time: 15000, // time default setting
+  restTime: 25000, // rest time default setting
   colors: {
     primary: '#FBB02D',
     primaryDark: '',
@@ -38,9 +47,15 @@ defaultSettings.colors.secondaryDark = shadeColor(
 // Local storeage access key
 const ACC_KEY = 'MAIN_TIMER_SETTINGS';
 
+const Wrapper = styled.div`
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+`;
+
 export function App() {
   useEffect(() => {
-    const prevSetting = localSetting.get(ACC_KEY) || {};
+    const prevSetting = localSetting.get(ACC_KEY);
     if (isObjEmpty(prevSetting)) {
       localSetting.set(ACC_KEY, defaultSettings);
     }
@@ -48,15 +63,15 @@ export function App() {
 
   return (
     <Router>
-      <div>
+      <Wrapper>
         <Route exact path="/">
           <Home />
         </Route>
         <Route path="/settings">
           <Settings />
         </Route>
-      </div>
-      <Nav />
+        <Nav />
+      </Wrapper>
     </Router>
   );
 }
