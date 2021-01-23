@@ -33,7 +33,9 @@ export function calculateTimeLeft(start) {
 // Get and sett values to local storeage
 export const localSetting = {
   get(accessKey) {
-    return JSON.parse(window.localStorage.getItem(accessKey)) || {};
+    return new Promise((resolve, reject) => {
+      resolve(JSON.parse(window.localStorage.getItem(accessKey)) || {});
+    });
   },
   set(accessKey, settingValue) {
     window.localStorage.setItem(accessKey, JSON.stringify(settingValue));

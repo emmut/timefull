@@ -25,8 +25,9 @@ WebFont.load({
 
 // default
 const defaultSettings = {
-  time: 15000, // time default setting
-  restTime: 25000, // rest time default setting
+  isDefault: true,
+  workTime: 2000, // time default setting
+  restTime: 5000, // rest time default setting
   colors: {
     primary: '#FBB02D',
     primaryDark: '',
@@ -54,12 +55,15 @@ const Wrapper = styled.div`
 `;
 
 export function App() {
-  useEffect(() => {
-    const prevSetting = localSetting.get(ACC_KEY);
-    if (isObjEmpty(prevSetting)) {
-      localSetting.set(ACC_KEY, defaultSettings);
-    }
-  }, []);
+  useEffect(
+    () =>
+      localSetting.get(ACC_KEY).then((value) => {
+        if (isObjEmpty(value)) {
+          localSetting.set(ACC_KEY, defaultSettings);
+        }
+      }),
+    []
+  );
 
   return (
     <Router>

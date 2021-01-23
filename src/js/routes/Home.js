@@ -2,11 +2,18 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 // components
-import ShowTime from '../components/ShowTime';
+import { TheTime } from '../components/TheTime';
 // helpers
-import { msToMm, calculateTimeLeft, localSetting } from '../lib/helpers';
+import {
+  msToMm,
+  calculateTimeLeft,
+  localSetting,
+  isObjEmpty
+} from '../lib/helpers';
 // font awesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+const ACC_KEY = 'MAIN_TIMER_SETTINGS';
 
 const Timer = styled.div`
   width: 100%;
@@ -38,50 +45,73 @@ const DisplaySettings = styled.div`
 `;
 
 export function Home() {
-  const settings = localSetting.get('MAIN_TIMER_SETTINGS');
-  // get options object
-  const futureTime = settings.time + Date.now();
+  // settings object
+  const [settings, setSettings] = useState(undefined);
 
   // start timer flag
   const [isStarted, setStart] = useState(false);
-  // time state
-  const [startTime, setStartTime] = useState(0);
 
-  // initialize time state
-  const [timeLeft, setTimeleft] = useState(
-    calculateTimeLeft(startTime, setStart)
-  );
+  // time state in ms
+  const [time, setTime] = useState(undefined);
+  const [timerId, setTimerId] = useState(null);
+  const [isOn, setIsOn] = useState(true);
 
-  // start the timer
-  useEffect(() => {
-    let timer = null;
-    if (isStarted) {
-      timer = setInterval(() => {
-        return setTimeleft(calculateTimeLeft(startTime, setStart));
-      }, 1000);
+  // timer type {work|rest}
+  const [isWorkTimer, setWorkTimer] = useState(true);
+
+  function updateTime() {
+    setTime((prevTime) => {
+      // is timer active?
+      const isActive = prevTime - 1 > 0;
+
+      if (isActive) {
+        // subtract time
+        return prevTime - 1000;
+      } else {
+        // set active timer type
+        return isWorkTimer ? settings.workTime : settings.restTime;
+      }
+    });
+  }
+
+  function turnOffTimer() {
+    clearInterval(timerId);
+
+    // flip timer type
+    setWorkTimer((prevWorkTimer) => !prevWorkTimer);
+
+    // reset time
+    setTime(isWorkTimer ? settings.workTime : settings.restTime);
+    setStart(!isStarted);
+  }
+
+  function toggleTimer() {
+    setStart(!isStarted);
+
+    if (timerId) {
+      turnOffTimer();
+      return;
     }
 
-    return () => clearInterval(timer);
-  });
-  // useEffect(
-  //   (isStarted) => {
-  //     console.log(isStarted);
-  //   },
-  //   [isStarted]
-  // );
+    setTimerId(setInterval(() => updateTime(), 1000));
+    return;
+  }
+
+  useEffect(() => {
+    // get settins object form local storeage
+    setTimeout(() => {
+      localSetting.get(ACC_KEY).then((value) => setSettings(value));
+    }, 500);
+  }, []);
+
   return (
     <Timer>
       <Wrapper>
         <DisplaySettings settings={settings} className="settings" />
-        <PlayBtn
-          onClick={() => {
-            setStart(!isStarted);
-            setStartTime(futureTime);
-          }}
-        >
+        <PlayBtn onClick={() => toggleTimer()}>
           <FontAwesomeIcon icon={['fas', isStarted ? 'pause' : 'play']} />
         </PlayBtn>
-        <ShowTime time={timeLeft} isStarted={isStarted} />
+        <TheTime time={time} isStarted={isStarted} />
       </Wrapper>
     </Timer>
   );
