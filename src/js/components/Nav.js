@@ -11,6 +11,7 @@ const Navigation = styled.nav`
   position: absolute;
   right: 1.2rem;
   bottom: 1.4rem;
+  cursor: pointer;
 `;
 
 const CircleBtn = styled.div`

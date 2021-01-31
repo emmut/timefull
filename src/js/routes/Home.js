@@ -104,6 +104,7 @@ export function Home() {
   }, []);
 
   useEffect(() => {
+    // the timer has reached the end
     if (typeof time === 'undefined') {
       turnOffTimer();
     }

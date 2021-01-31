@@ -9,9 +9,9 @@ const defaultSettings = {
   workTime: 2000, // time default setting
   restTime: 5000, // rest time default setting
   colors: {
-    primary: '#FBB02D',
+    primary: '#fbb02d',
     primaryDark: '',
-    secondary: '#63C132',
+    secondary: '#63c132',
     secondaryDark: ''
   }
 };
