@@ -13,7 +13,10 @@ import { Nav } from './components/Nav';
 import './plugins/fontawesome';
 
 // helpers
-import { isObjEmpty, localSetting, shadeColor } from './lib/helpers';
+import { isObjEmpty, localSetting } from './lib/helpers';
+
+// default settings
+import { ACC_KEY, defaultSettings } from './lib/defaults';
 
 import WebFont from 'webfontloader';
 
@@ -23,31 +26,6 @@ WebFont.load({
   }
 });
 
-// default
-const defaultSettings = {
-  isDefault: true,
-  workTime: 2000, // time default setting
-  restTime: 5000, // rest time default setting
-  colors: {
-    primary: '#FBB02D',
-    primaryDark: '',
-    secondary: '#63C132',
-    secondaryDark: ''
-  }
-};
-
-// TODO: make prettier
-defaultSettings.colors.primaryDark = shadeColor(
-  defaultSettings.colors.primary,
-  -15
-);
-defaultSettings.colors.secondaryDark = shadeColor(
-  defaultSettings.colors.secondary,
-  -15
-);
-// Local storeage access key
-const ACC_KEY = 'MAIN_TIMER_SETTINGS';
-
 const Wrapper = styled.div`
   position: relative;
   height: 100vh;
@@ -55,27 +33,32 @@ const Wrapper = styled.div`
 `;
 
 export function App() {
-  useEffect(
-    () =>
-      localSetting.get(ACC_KEY).then((value) => {
-        if (isObjEmpty(value)) {
-          localSetting.set(ACC_KEY, defaultSettings);
-        }
-      }),
-    []
-  );
+  const [loaded, setLoaded] = useState(false);
+  useEffect(async () => {
+    const setting = await localSetting.get(ACC_KEY);
+    if (isObjEmpty(setting)) {
+      localSetting.set(ACC_KEY, defaultSettings);
+    }
+    setLoaded(true);
+  }, []);
 
   return (
-    <Router>
-      <Wrapper>
-        <Route exact path="/">
-          <Home />
-        </Route>
-        <Route path="/settings">
-          <Settings />
-        </Route>
-        <Nav />
-      </Wrapper>
-    </Router>
+    <>
+      {loaded ? (
+        <Router>
+          <Wrapper>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route path="/settings">
+              <Settings />
+            </Route>
+            <Nav />
+          </Wrapper>
+        </Router>
+      ) : (
+        <h1>Wait...</h1>
+      )}
+    </>
   );
 }
