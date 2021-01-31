@@ -54,7 +54,6 @@ export function Home() {
   // time state in ms
   const [time, setTime] = useState(undefined);
   const [timerId, setTimerId] = useState(null);
-  const [isOn, setIsOn] = useState(true);
 
   // timer type {work|rest}
   const [isWorkTimer, setWorkTimer] = useState(true);
@@ -63,29 +62,30 @@ export function Home() {
     setTime((prevTime) => {
       // is timer active?
       const isActive = prevTime - 1 > 0;
-
       if (isActive) {
         // subtract time
         return prevTime - 1000;
       } else {
-        // set active timer type
-        return isWorkTimer ? settings.workTime : settings.restTime;
+        // the end
+        setWorkTimer(!isWorkTimer);
+
+        return undefined;
       }
     });
   }
 
   function turnOffTimer() {
+    // clear timer
     clearInterval(timerId);
-
-    // flip timer type
-    setWorkTimer((prevWorkTimer) => !prevWorkTimer);
-
-    // reset time
-    setTime(isWorkTimer ? settings.workTime : settings.restTime);
-    setStart(!isStarted);
+    // clear timer state
+    setTimerId(undefined);
+    setStart(false);
   }
 
   function toggleTimer() {
+    // debugger;
+    setTime(isWorkTimer ? settings.workTime : settings.restTime);
+
     setStart(!isStarted);
 
     if (timerId) {
@@ -94,15 +94,20 @@ export function Home() {
     }
 
     setTimerId(setInterval(() => updateTime(), 1000));
-    return;
   }
 
-  useEffect(() => {
+  // get settings
+  useEffect(async () => {
     // get settins object form local storeage
-    setTimeout(() => {
-      localSetting.get(ACC_KEY).then((value) => setSettings(value));
-    }, 500);
+    const settings = await localSetting.get(ACC_KEY);
+    setSettings(settings);
   }, []);
+
+  useEffect(() => {
+    if (typeof time === 'undefined') {
+      turnOffTimer();
+    }
+  }, [time]);
 
   return (
     <Timer>
