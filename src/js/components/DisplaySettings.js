@@ -1,7 +1,6 @@
 import React from 'react';
 
 export function DisplaySettings({ settings }) {
-  console.log(settings);
   return (
     <>
       <span className="text-large">

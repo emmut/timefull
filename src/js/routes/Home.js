@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
+import { GlobalSettings } from '../lib/GlobalSettings';
 
 // components
 import { TheTime } from '../components/TheTime';
 // helpers
-import { localSetting } from '../lib/helpers';
+// import { localSetting } from '../lib/helpers';
 // font awesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const ACC_KEY = 'MAIN_TIMER_SETTINGS';
+// import { ACC_KEY } from '../lib/defaults';
 
 const Timer = styled.div`
   width: 100%;
@@ -40,8 +41,10 @@ const DisplaySettings = styled.div`
 `;
 
 export function Home() {
+  const settings = useContext(GlobalSettings);
+
   // settings object
-  const [settings, setSettings] = useState(undefined);
+  // const [settings, setSettings] = useState(undefined);
 
   // start timer flag
   const [isStarted, setStart] = useState(false);
@@ -99,14 +102,14 @@ export function Home() {
     setTime(isWorkTimer ? settings.workTime : settings.restTime);
   }
   // get settings
-  useEffect(async () => {
-    // get settins object form local storeage
-    const settings = await localSetting.get(ACC_KEY);
-    setSettings(settings);
+  // useEffect(async () => {
+  //   // get settins object form local storeage
+  //   const settings = await localSetting.get(ACC_KEY);
+  //   setSettings(settings);
 
-    // initialize time state
-    setTime(settings.workTime);
-  }, []);
+  //   // initialize time state
+  //   setTime(settings.workTime);
+  // }, []);
 
   useEffect(() => {
     // the timer has reached the end
