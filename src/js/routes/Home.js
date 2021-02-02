@@ -4,12 +4,7 @@ import styled from 'styled-components';
 // components
 import { TheTime } from '../components/TheTime';
 // helpers
-import {
-  msToMm,
-  calculateTimeLeft,
-  localSetting,
-  isObjEmpty
-} from '../lib/helpers';
+import { localSetting } from '../lib/helpers';
 // font awesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -83,24 +78,34 @@ export function Home() {
   }
 
   function toggleTimer() {
-    // debugger;
-    setTime(isWorkTimer ? settings.workTime : settings.restTime);
-
     setStart(!isStarted);
 
     if (timerId) {
       turnOffTimer();
       return;
     }
-
     setTimerId(setInterval(() => updateTime(), 1000));
   }
 
+  // reset timer and set time to next lap
+  function nextLap() {
+    setWorkTimer(!isWorkTimer);
+
+    turnOffTimer();
+  }
+
+  // reset current lap
+  function resetLap() {
+    setTime(isWorkTimer ? settings.workTime : settings.restTime);
+  }
   // get settings
   useEffect(async () => {
     // get settins object form local storeage
     const settings = await localSetting.get(ACC_KEY);
     setSettings(settings);
+
+    // initialize time state
+    setTime(settings.workTime);
   }, []);
 
   useEffect(() => {
@@ -110,6 +115,14 @@ export function Home() {
     }
   }, [time]);
 
+  useEffect(() => {
+    // will be undefined on first render
+    if (typeof settings === 'undefined') {
+      return;
+    }
+    setTime(isWorkTimer ? settings.workTime : settings.restTime);
+  }, [isWorkTimer]);
+
   return (
     <Timer>
       <Wrapper>
@@ -117,7 +130,13 @@ export function Home() {
         <PlayBtn onClick={() => toggleTimer()}>
           <FontAwesomeIcon icon={['fas', isStarted ? 'pause' : 'play']} />
         </PlayBtn>
-        <TheTime time={time} isStarted={isStarted} />
+        <TheTime time={time} />
+        <div onClick={() => nextLap()}>
+          <FontAwesomeIcon icon={['fas', 'forward']} />
+        </div>
+        <div onClick={() => resetLap()}>
+          <FontAwesomeIcon icon={['fas', 'undo']} />
+        </div>
       </Wrapper>
     </Timer>
   );

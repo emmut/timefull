@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { localSetting, ACC_KEY } from '../lib/helpers';
+// const ACC_KEY = 'MAIN_TIMER_SETTINGS';
 
 export function Settings() {
   const [settings, setSettings] = useState(undefined);
@@ -19,14 +20,17 @@ export function Settings() {
   //   });
   // };
   // set up setting state form local storage on mount
+
   useEffect(async () => {
+    // get settins object form local storeage
     const settings = await localSetting.get(ACC_KEY);
     setSettings(settings);
-    debugger;
-    console.log(JSON.stringify(settings));
   }, []);
+
   // add new setting
-  useEffect(() => {}, [settings]);
+  useEffect(() => {
+    console.log(settings);
+  }, [settings]);
 
   return (
     <div>

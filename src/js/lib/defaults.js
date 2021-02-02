@@ -6,8 +6,9 @@ const ACC_KEY = 'MAIN_TIMER_SETTINGS';
 // default
 const defaultSettings = {
   isDefault: true,
-  workTime: 2000, // time default setting
-  restTime: 5000, // rest time default setting
+  workTime: 1200000, // time default setting
+  restTime: 300000, // rest time default setting
+
   colors: {
     primary: '#fbb02d',
     primaryDark: '',

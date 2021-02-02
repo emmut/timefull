@@ -13,11 +13,7 @@ const Time = styled.div`
   }
 `;
 
-export function TheTime({ time, isStarted }) {
-  if (!isStarted) {
-    return null;
-  }
-
+export function TheTime({ time }) {
   if (typeof time === 'undefined') {
     return null;
   }
