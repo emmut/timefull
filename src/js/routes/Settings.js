@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { localSetting, ACC_KEY } from '../lib/helpers';
+import { localSetting } from '../lib/helpers';
 // const ACC_KEY = 'MAIN_TIMER_SETTINGS';
 
 export function Settings() {

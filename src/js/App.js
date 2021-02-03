@@ -19,14 +19,6 @@ import { isObjEmpty, localSetting } from './lib/helpers';
 // local storeage acces key
 import { ACC_KEY } from './lib/defaults';
 
-import WebFont from 'webfontloader';
-
-WebFont.load({
-  google: {
-    families: ['Nunito:300,400,700', 'sans-serif']
-  }
-});
-
 const Wrapper = styled.div`
   position: relative;
   height: 100vh;
