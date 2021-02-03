@@ -59,10 +59,9 @@ export function Home() {
   function updateTime() {
     setTime((prevTime) => {
       // is timer active?
-      const isActive = prevTime - 1 > 0;
-      if (isActive) {
+      if (prevTime - 100 > 0) {
         // subtract time
-        return prevTime - 1000;
+        return prevTime - 100;
       } else {
         // the end
         setWorkTimer(!isWorkTimer);
@@ -87,7 +86,7 @@ export function Home() {
       turnOffTimer();
       return;
     }
-    setTimerId(setInterval(() => updateTime(), 1000));
+    setTimerId(setInterval(() => updateTime(), 100));
   }
 
   // reset timer and set time to next lap
