@@ -11,8 +11,9 @@ const StyledSettings = styled.div`
   gap: 1rem;
 `;
 
-export function DisplaySettings() {
-  const settings = handleFirstPayload(useContext(GlobalSettings));
+export function DisplaySettings({ settings: prevSettings }) {
+  // const settings = handleFirstPayload(useContext(GlobalSettings));
+  const settings = handleFirstPayload(prevSettings);
   return (
     <StyledSettings>
       <span className="text-large">

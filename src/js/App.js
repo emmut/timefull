@@ -17,7 +17,7 @@ import './plugins/fontawesome';
 import { isObjEmpty, localSetting } from './lib/helpers';
 
 // local storeage acces key
-import { defaultSettings, ACC_KEY } from './lib/defaults';
+import { defaultSettings } from './lib/defaults';
 
 const Wrapper = styled.div`
   position: relative;
@@ -29,10 +29,12 @@ const Wrapper = styled.div`
 
 export function App() {
   const [settings, setSettings] = useState(undefined);
+  const [time, setTime] = useState(undefined);
+
   useEffect(async () => {
-    const settings = await localSetting.get(ACC_KEY);
+    const settings = await localSetting.get();
     if (isObjEmpty(settings)) {
-      localSetting.set(ACC_KEY, defaultSettings);
+      localSetting.set(defaultSettings);
     }
     setSettings(settings);
   }, []);
@@ -42,10 +44,14 @@ export function App() {
       <Router>
         <Wrapper>
           <Route exact path="/">
-            <Home />
+            <Home settings={settings} time={time} setTime={setTime} />
           </Route>
           <Route path="/settings">
-            <Settings />
+            <Settings
+              settings={settings}
+              setTime={setTime}
+              setSettings={setSettings}
+            />
           </Route>
         </Wrapper>
         <Nav />

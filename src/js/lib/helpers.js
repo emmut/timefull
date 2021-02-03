@@ -1,4 +1,4 @@
-import { defaultSettings } from './defaults';
+import { defaultSettings, ACC_KEY } from './defaults';
 
 // time conversions
 export const mmToMs = (mins) => {
@@ -34,13 +34,18 @@ export function calculateTimeLeft(start) {
 
 // Get and sett values to local storeage
 export const localSetting = {
-  get(accessKey) {
+  get() {
     return new Promise((resolve, reject) => {
-      resolve(JSON.parse(window.localStorage.getItem(accessKey)) || {});
+      resolve(
+        JSON.parse(window.localStorage.getItem('MAIN_TIMER_SETTINGS')) || {}
+      );
     });
   },
-  set(accessKey, settingValue) {
-    window.localStorage.setItem(accessKey, JSON.stringify(settingValue));
+  set(settingValue) {
+    window.localStorage.setItem(
+      'MAIN_TIMER_SETTINGS',
+      JSON.stringify(settingValue)
+    );
   }
 };
 

@@ -39,14 +39,14 @@ const StyledDisplaySettings = styled(DisplaySettings)`
   transform: translate(-50%);
 `;
 
-export function Home() {
-  const settings = handleFirstPayload(useContext(GlobalSettings));
+export function Home({ settings: prevSettings, time, setTime }) {
+  // const settings = handleFirstPayload(useContext(GlobalSettings));
+  const settings = handleFirstPayload(prevSettings);
 
   // start timer flag
   const [isStarted, setStart] = useState(false);
 
   // time state in ms
-  const [time, setTime] = useState(undefined);
   const [timerId, setTimerId] = useState(null);
 
   // timer type {work|rest}
@@ -115,7 +115,7 @@ export function Home() {
   return (
     <Timer>
       <Wrapper>
-        <StyledDisplaySettings className="settings" />
+        <StyledDisplaySettings settings={settings} className="settings" />
         <PlayBtn onClick={() => toggleTimer()}>
           <FontAwesomeIcon icon={['fas', isStarted ? 'pause' : 'play']} />
         </PlayBtn>

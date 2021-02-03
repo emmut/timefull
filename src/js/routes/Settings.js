@@ -1,57 +1,75 @@
-import React, { useState, useEffect } from 'react';
-import { localSetting } from '../lib/helpers';
-// const ACC_KEY = 'MAIN_TIMER_SETTINGS';
+import React, { useState, useEffect, useContext } from 'react';
 
-export function Settings() {
-  const [settings, setSettings] = useState(undefined);
+import { handleFirstPayload, localSetting } from '../lib/helpers';
+import { GlobalSettings } from '../lib/GlobalSettings';
+
+export function Settings({ settings: prevSettings, setSettings }) {
+  // const prevSettings = handleFirstPayload(useContext(GlobalSettings));
+
+  const [formSettings, setFormSetting] = useState(prevSettings);
 
   // handel form input
-  // const handleChange = (e) => {
-  //   setSetting((prevSetting) => {
-  //     if (
-  //       typeof prevSetting === 'object' &&
-  //       !prevSetting.hasOwnProperty(e.target.name) &&
-  //       !Number.isInteger(e.target.value)
-  //     ) {
-  //       return prevSetting;
-  //     }
-  //     prevSetting[e.target.name] = e.target.value;
-  //     return prevSetting;
-  //   });
-  // };
-  // set up setting state form local storage on mount
+  const handleChange = (e) => {
+    setFormSetting((prevSettings) => {
+      return {
+        ...prevSettings,
+        [e.target.name]: e.target.value
+      };
+    });
+  };
 
-  useEffect(async () => {
-    // get settins object form local storeage
-    const settings = await localSetting.get(ACC_KEY);
-    setSettings(settings);
-  }, []);
-
-  // add new setting
+  // handle saving value when changing input value
   useEffect(() => {
-    console.log(settings);
-  }, [settings]);
+    // save to local
+    localSetting.set(formSettings);
+
+    // updates current state
+    setSettings(formSettings);
+  }, [formSettings]);
+
+  const FormInput = ({ name, label, type, value }) => {
+    return (
+      <label htmlFor={name}>
+        {label}
+        <input
+          type={type}
+          name={name}
+          id={name}
+          onBlur={(e) => handleChange(e)}
+          defaultValue={value}
+          // onChange={(e) => handleChange(e)}
+          // value={value}
+        />
+      </label>
+    );
+  };
 
   return (
-    <div>
-      <label htmlFor="time">
-        Timer length
-        <input
-          type="number"
-          name="time"
-          id="time"
-          onChange={(e) => handleChange(e)}
-        />
-      </label>
-      <label htmlFor="time">
-        Timer length
-        <input
-          type="number"
-          name="restTime"
-          id="restTime"
-          onChange={(e) => handleChange(e)}
-        />
-      </label>
-    </div>
+    <form>
+      <FormInput
+        name="workTime"
+        label="Timer length"
+        type="number"
+        value={formSettings.workTime}
+      />
+      <FormInput
+        name="restTime"
+        label="Rest length"
+        type="number"
+        value={formSettings.restTime}
+      />
+      {/* <FormInput
+        name="primary"
+        label="Primary Color"
+        type="text"
+        value={settings.colors.primary}
+      />
+      <FormInput
+        name="secondary"
+        label="Secondary Color"
+        type="text"
+        value={settings.colors.secondary}
+      /> */}
+    </form>
   );
 }

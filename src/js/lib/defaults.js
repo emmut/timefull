@@ -1,8 +1,5 @@
 import { shadeColor } from './helpers';
 
-// Local storeage access key
-const ACC_KEY = 'MAIN_TIMER_SETTINGS';
-
 // default
 const defaultSettings = {
   isDefault: true,
@@ -27,4 +24,4 @@ defaultSettings.colors.secondaryDark = shadeColor(
   -15
 );
 
-export { defaultSettings, ACC_KEY };
+export { defaultSettings };
