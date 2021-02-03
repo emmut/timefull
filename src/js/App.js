@@ -17,7 +17,7 @@ import './plugins/fontawesome';
 import { isObjEmpty, localSetting } from './lib/helpers';
 
 // local storeage acces key
-import { ACC_KEY } from './lib/defaults';
+import { defaultSettings, ACC_KEY } from './lib/defaults';
 
 const Wrapper = styled.div`
   position: relative;
@@ -38,25 +38,18 @@ export function App() {
   }, []);
 
   return (
-    <>
-      {typeof settings !== 'undefined' ? (
-        <GlobalSettings.Provider value={settings}>
-          <Router>
-            <Wrapper>
-              <Route exact path="/">
-                <Home />
-              </Route>
-              <Route path="/settings">
-                <Settings />
-              </Route>
-            </Wrapper>
-            <Nav />
-          </Router>
-        </GlobalSettings.Provider>
-      ) : (
-        // TODO: style this
-        <h1>Wait...</h1>
-      )}
-    </>
+    <GlobalSettings.Provider value={settings}>
+      <Router>
+        <Wrapper>
+          <Route exact path="/">
+            <Home />
+          </Route>
+          <Route path="/settings">
+            <Settings />
+          </Route>
+        </Wrapper>
+        <Nav />
+      </Router>
+    </GlobalSettings.Provider>
   );
 }

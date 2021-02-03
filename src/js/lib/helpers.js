@@ -1,3 +1,5 @@
+import { defaultSettings } from './defaults';
+
 // time conversions
 export const mmToMs = (mins) => {
   return +mins * 60 * 1000;
@@ -61,4 +63,14 @@ export function shadeColor(color, percent) {
   var BB = B.toString(16).length == 1 ? '0' + B.toString(16) : B.toString(16);
 
   return '#' + RR + GG + BB;
+}
+
+// on first startup
+export function handleFirstPayload(obj) {
+  if (isObjEmpty(obj)) {
+    // very fist render
+    return defaultSettings;
+  } else {
+    return obj;
+  }
 }

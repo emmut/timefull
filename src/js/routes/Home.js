@@ -4,12 +4,11 @@ import { GlobalSettings } from '../lib/GlobalSettings';
 
 // components
 import { TheTime } from '../components/TheTime';
+import { DisplaySettings } from '../components/DisplaySettings';
 // helpers
-// import { localSetting } from '../lib/helpers';
+import { handleFirstPayload } from '../lib/helpers';
 // font awesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-// import { ACC_KEY } from '../lib/defaults';
 
 const Timer = styled.div`
   width: 100%;
@@ -33,7 +32,7 @@ const PlayBtn = styled.div`
   font-size: 7rem;
 `;
 
-const DisplaySettings = styled.div`
+const StyledDisplaySettings = styled(DisplaySettings)`
   position: absolute;
   top: -2rem;
   left: 50%;
@@ -41,10 +40,7 @@ const DisplaySettings = styled.div`
 `;
 
 export function Home() {
-  const settings = useContext(GlobalSettings);
-
-  // settings object
-  // const [settings, setSettings] = useState(undefined);
+  const settings = handleFirstPayload(useContext(GlobalSettings));
 
   // start timer flag
   const [isStarted, setStart] = useState(false);
@@ -100,15 +96,6 @@ export function Home() {
   function resetLap() {
     setTime(isWorkTimer ? settings.workTime : settings.restTime);
   }
-  // get settings
-  // useEffect(async () => {
-  //   // get settins object form local storeage
-  //   const settings = await localSetting.get(ACC_KEY);
-  //   setSettings(settings);
-
-  //   // initialize time state
-  //   setTime(settings.workTime);
-  // }, []);
 
   useEffect(() => {
     // the timer has reached the end
@@ -128,7 +115,7 @@ export function Home() {
   return (
     <Timer>
       <Wrapper>
-        <DisplaySettings settings={settings} className="settings" />
+        <StyledDisplaySettings className="settings" />
         <PlayBtn onClick={() => toggleTimer()}>
           <FontAwesomeIcon icon={['fas', isStarted ? 'pause' : 'play']} />
         </PlayBtn>
