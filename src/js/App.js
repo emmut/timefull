@@ -27,12 +27,22 @@ const Wrapper = styled.div`
 `;
 
 export function App() {
+  /**
+   * App level state
+   */
   const [settings, setSettings] = useState(undefined);
   const [time, setTime] = useState(undefined);
+  // time state in ms
+  const [timerId, setTimerId] = useState(null);
 
+  // start timer flag
+  const [isStarted, setStart] = useState(false);
+
+  // setup settings state
   useEffect(() => {
     const settings = localSetting.get();
     if (isObjEmpty(settings)) {
+      // set default settings
       localSetting.set(defaultSettings);
     }
     setSettings(settings);
@@ -43,14 +53,19 @@ export function App() {
       <Router>
         <Switch>
           <Route exact path="/">
-            <Home settings={settings} time={time} setTime={setTime} />
+            <Home
+              settings={settings}
+              time={time}
+              setTime={setTime}
+              timerId={timerId}
+              setTimerId={setTimerId}
+              isStarted={isStarted}
+              setStart={setStart}
+            />
           </Route>
           <Route path="/settings">
-            <Settings
-              settings={settings}
-              setTime={setTime}
-              setSettings={setSettings}
-            />
+            {/* TODO: pause timer */}
+            <Settings settings={settings} setSettings={setSettings} />
           </Route>
         </Switch>
         <Nav />

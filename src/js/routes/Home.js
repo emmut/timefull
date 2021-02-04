@@ -39,15 +39,17 @@ const StyledDisplaySettings = styled(DisplaySettings)`
   transform: translate(-50%);
 `;
 
-export function Home({ settings: prevSettings, time, setTime }) {
+export function Home({
+  settings,
+  time,
+  setTime,
+  timerId,
+  setTimerId,
+  isStarted,
+  setStart
+}) {
   // const settings = handleFirstPayload(useContext(GlobalSettings));
-  const settings = handleFirstPayload(prevSettings);
-
-  // start timer flag
-  const [isStarted, setStart] = useState(false);
-
-  // time state in ms
-  const [timerId, setTimerId] = useState(null);
+  // const settings = handleFirstPayload(prevSettings);
 
   // timer type {work|rest}
   const [isWorkTimer, setWorkTimer] = useState(true);
