@@ -3,6 +3,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import { handleFirstPayload, localSetting } from '../lib/helpers';
 import { GlobalSettings } from '../lib/GlobalSettings';
 
+import { msToMm, mmToMs } from '../lib/helpers';
+
 export function Settings({ settings: prevSettings, setSettings }) {
   // const prevSettings = handleFirstPayload(useContext(GlobalSettings));
 
@@ -13,7 +15,7 @@ export function Settings({ settings: prevSettings, setSettings }) {
     setFormSetting((prevSettings) => {
       return {
         ...prevSettings,
-        [e.target.name]: e.target.value
+        [e.target.name]: mmToMs(e.target.value)
       };
     });
   };
@@ -36,7 +38,7 @@ export function Settings({ settings: prevSettings, setSettings }) {
           name={name}
           id={name}
           onBlur={(e) => handleChange(e)}
-          defaultValue={value}
+          defaultValue={msToMm(value)}
           // onChange={(e) => handleChange(e)}
           // value={value}
         />

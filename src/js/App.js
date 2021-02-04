@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { MemoryRouter as Router, Route } from 'react-router-dom';
+import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
 import styled from 'styled-components';
-import { GlobalSettings } from './lib/GlobalSettings';
 
 // routes
 import { Home } from './routes/Home';
@@ -31,18 +30,18 @@ export function App() {
   const [settings, setSettings] = useState(undefined);
   const [time, setTime] = useState(undefined);
 
-  useEffect(async () => {
-    const settings = await localSetting.get();
+  useEffect(() => {
+    const settings = localSetting.get();
     if (isObjEmpty(settings)) {
       localSetting.set(defaultSettings);
     }
     setSettings(settings);
   }, []);
 
-  return (
-    <GlobalSettings.Provider value={settings}>
+  return typeof settings !== 'undefined' ? (
+    <Wrapper>
       <Router>
-        <Wrapper>
+        <Switch>
           <Route exact path="/">
             <Home settings={settings} time={time} setTime={setTime} />
           </Route>
@@ -53,9 +52,11 @@ export function App() {
               setSettings={setSettings}
             />
           </Route>
-        </Wrapper>
+        </Switch>
         <Nav />
       </Router>
-    </GlobalSettings.Provider>
+    </Wrapper>
+  ) : (
+    <h1>Wait...</h1>
   );
 }

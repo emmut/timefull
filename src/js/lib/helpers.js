@@ -35,11 +35,7 @@ export function calculateTimeLeft(start) {
 // Get and sett values to local storeage
 export const localSetting = {
   get() {
-    return new Promise((resolve, reject) => {
-      resolve(
-        JSON.parse(window.localStorage.getItem('MAIN_TIMER_SETTINGS')) || {}
-      );
-    });
+    return JSON.parse(window.localStorage.getItem('MAIN_TIMER_SETTINGS')) || {};
   },
   set(settingValue) {
     window.localStorage.setItem(

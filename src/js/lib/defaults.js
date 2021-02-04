@@ -2,7 +2,6 @@ import { shadeColor } from './helpers';
 
 // default
 const defaultSettings = {
-  isDefault: true,
   workTime: 1200000, // time default setting
   restTime: 300000, // rest time default setting
 
