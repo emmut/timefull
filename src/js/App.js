@@ -31,12 +31,71 @@ export function App() {
    * App level state
    */
   const [settings, setSettings] = useState(undefined);
-  const [time, setTime] = useState(undefined);
   // time state in ms
+  const [time, setTime] = useState(undefined);
+  // current interval id
   const [timerId, setTimerId] = useState(null);
-
   // start timer flag
   const [isStarted, setStart] = useState(false);
+  // timer type {work|rest}
+  const [isWorkTimer, setWorkTimer] = useState(true);
+
+  function updateTime() {
+    setTime((prevTime) => {
+      // is timer active?
+      if (prevTime - 100 > 0) {
+        // subtract time
+        return prevTime - 100;
+      } else {
+        // the end
+        setWorkTimer(!isWorkTimer);
+        return undefined;
+      }
+    });
+  }
+
+  function turnOffTimer() {
+    // clear timer
+    clearInterval(timerId);
+    // clear timer state
+    setTimerId(undefined);
+    setStart(false);
+  }
+
+  function toggleTimer() {
+    setStart(!isStarted);
+    if (timerId) {
+      turnOffTimer();
+      return;
+    }
+    setTimerId(setInterval(() => updateTime(), 100));
+  }
+
+  // reset timer and set time to next lap
+  function nextLap() {
+    setWorkTimer(!isWorkTimer);
+    turnOffTimer();
+  }
+
+  // reset current lap
+  function resetLap() {
+    setTime(isWorkTimer ? settings.workTime : settings.restTime);
+  }
+
+  useEffect(() => {
+    // the timer has reached the end
+    if (typeof time === 'undefined') {
+      turnOffTimer();
+    }
+  }, [time]);
+
+  useEffect(() => {
+    // will be undefined on first render
+    if (typeof settings === 'undefined') {
+      return;
+    }
+    setTime(isWorkTimer ? settings.workTime : settings.restTime);
+  }, [isWorkTimer, settings]);
 
   // setup settings state
   useEffect(() => {
@@ -56,11 +115,10 @@ export function App() {
             <Home
               settings={settings}
               time={time}
-              setTime={setTime}
-              timerId={timerId}
-              setTimerId={setTimerId}
               isStarted={isStarted}
-              setStart={setStart}
+              toggleTimer={toggleTimer}
+              nextLap={nextLap}
+              resetLap={resetLap}
             />
           </Route>
           <Route path="/settings">
@@ -72,6 +130,7 @@ export function App() {
       </Router>
     </Wrapper>
   ) : (
+    // TODO: Style this
     <h1>Wait...</h1>
   );
 }

@@ -38,7 +38,6 @@ const StyledDisplaySettings = styled(DisplaySettings)`
   left: 50%;
   transform: translate(-50%);
 `;
-
 export function Home({
   settings,
   time,
@@ -46,74 +45,11 @@ export function Home({
   timerId,
   setTimerId,
   isStarted,
-  setStart
+  setStart,
+  toggleTimer,
+  nextLap,
+  resetLap
 }) {
-  // const settings = handleFirstPayload(useContext(GlobalSettings));
-  // const settings = handleFirstPayload(prevSettings);
-
-  // timer type {work|rest}
-  const [isWorkTimer, setWorkTimer] = useState(true);
-
-  function updateTime() {
-    setTime((prevTime) => {
-      // is timer active?
-      if (prevTime - 100 > 0) {
-        // subtract time
-        return prevTime - 100;
-      } else {
-        // the end
-        setWorkTimer(!isWorkTimer);
-
-        return undefined;
-      }
-    });
-  }
-
-  function turnOffTimer() {
-    // clear timer
-    clearInterval(timerId);
-    // clear timer state
-    setTimerId(undefined);
-    setStart(false);
-  }
-
-  function toggleTimer() {
-    setStart(!isStarted);
-
-    if (timerId) {
-      turnOffTimer();
-      return;
-    }
-    setTimerId(setInterval(() => updateTime(), 100));
-  }
-
-  // reset timer and set time to next lap
-  function nextLap() {
-    setWorkTimer(!isWorkTimer);
-
-    turnOffTimer();
-  }
-
-  // reset current lap
-  function resetLap() {
-    setTime(isWorkTimer ? settings.workTime : settings.restTime);
-  }
-
-  useEffect(() => {
-    // the timer has reached the end
-    if (typeof time === 'undefined') {
-      turnOffTimer();
-    }
-  }, [time]);
-
-  useEffect(() => {
-    // will be undefined on first render
-    if (typeof settings === 'undefined') {
-      return;
-    }
-    setTime(isWorkTimer ? settings.workTime : settings.restTime);
-  }, [isWorkTimer]);
-
   return (
     <Timer>
       <Wrapper>

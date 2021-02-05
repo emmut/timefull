@@ -16,22 +16,6 @@ export function isObjEmpty(obj) {
   return true;
 }
 
-// calculate time left
-export function calculateTimeLeft(start) {
-  let currentTime = Date.now();
-  const difference = start - currentTime;
-
-  let timeLeft = {};
-
-  if (difference > 0) {
-    timeLeft = {
-      minutes: Math.floor((difference / 60 / 1000) % 60),
-      seconds: Math.floor((difference / 1000) % 60)
-    };
-  }
-  return timeLeft;
-}
-
 // Get and sett values to local storeage
 export const localSetting = {
   get() {
