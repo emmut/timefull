@@ -14,7 +14,7 @@ const Navigation = styled.nav`
   cursor: pointer;
 `;
 
-const CircleBtn = styled.div`
+const CircleBtn = styled.button`
   display: grid;
   place-items: center;
   color: var(--color-neutral);
@@ -68,7 +68,7 @@ const Overlay = styled.div`
     `}
 `;
 
-export function Nav() {
+export function Nav({ turnOffTimer }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (

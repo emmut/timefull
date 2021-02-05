@@ -1,12 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { GlobalSettings } from '../lib/GlobalSettings';
 
 // components
 import { TheTime } from '../components/TheTime';
 import { DisplaySettings } from '../components/DisplaySettings';
-// helpers
-import { handleFirstPayload } from '../lib/helpers';
 // font awesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -20,7 +17,7 @@ const Wrapper = styled.div`
   position: relative;
 `;
 
-const PlayBtn = styled.div`
+const PlayBtn = styled.button`
   display: grid;
   place-items: center;
   color: var(--color-neutral);
@@ -41,11 +38,7 @@ const StyledDisplaySettings = styled(DisplaySettings)`
 export function Home({
   settings,
   time,
-  setTime,
-  timerId,
-  setTimerId,
   isStarted,
-  setStart,
   toggleTimer,
   nextLap,
   resetLap
@@ -58,12 +51,12 @@ export function Home({
           <FontAwesomeIcon icon={['fas', isStarted ? 'pause' : 'play']} />
         </PlayBtn>
         <TheTime time={time} />
-        <div onClick={() => nextLap()}>
+        <button onClick={() => nextLap()}>
           <FontAwesomeIcon icon={['fas', 'forward']} />
-        </div>
-        <div onClick={() => resetLap()}>
+        </button>
+        <button onClick={() => resetLap()}>
           <FontAwesomeIcon icon={['fas', 'undo']} />
-        </div>
+        </button>
       </Wrapper>
     </Timer>
   );

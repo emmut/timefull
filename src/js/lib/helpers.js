@@ -1,4 +1,4 @@
-import { defaultSettings, ACC_KEY } from './defaults';
+import { defaultSettings } from './defaults';
 
 // time conversions
 export const mmToMs = (mins) => {

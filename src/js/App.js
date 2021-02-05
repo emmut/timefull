@@ -19,6 +19,8 @@ import { isObjEmpty, localSetting } from './lib/helpers';
 import { defaultSettings } from './lib/defaults';
 
 const Wrapper = styled.div`
+  display: grid;
+  place-items: center;
   position: relative;
   height: 100vh;
   width: 100vw;
@@ -103,8 +105,10 @@ export function App() {
     if (isObjEmpty(settings)) {
       // set default settings
       localSetting.set(defaultSettings);
+      setSettings(defaultSettings);
+    } else {
+      setSettings(settings);
     }
-    setSettings(settings);
   }, []);
 
   return typeof settings !== 'undefined' ? (
@@ -123,14 +127,20 @@ export function App() {
           </Route>
           <Route path="/settings">
             {/* TODO: pause timer */}
-            <Settings settings={settings} setSettings={setSettings} />
+            <Settings
+              settings={settings}
+              setSettings={setSettings}
+              toggleTimer={toggleTimer}
+              timerId={timerId}
+            />
           </Route>
         </Switch>
         <Nav />
       </Router>
     </Wrapper>
   ) : (
-    // TODO: Style this
-    <h1>Wait...</h1>
+    <Wrapper>
+      <h1>Loading...</h1>
+    </Wrapper>
   );
 }
