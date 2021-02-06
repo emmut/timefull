@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+
+// components
+import { FormColorInput } from '../components/FormColorInput';
+import { FormNumberInput } from '../components/FormNumberInput';
 
 import { localSetting } from '../lib/helpers';
 
-import { msToMm, mmToMs } from '../lib/helpers';
+const StyledForm = styled.form`
+  display: grid;
+  place-items: center;
+  height: 100%;
+  width: 100%;
+`;
 
 export function Settings({
   settings: prevSettings,
@@ -11,17 +21,6 @@ export function Settings({
   timerId
 }) {
   const [formSettings, setFormSetting] = useState(prevSettings);
-
-  // handel form input
-  const handleChange = (e) => {
-    // pauses the timer
-    setFormSetting((prevSettings) => {
-      return {
-        ...prevSettings,
-        [e.target.name]: mmToMs(e.target.value)
-      };
-    });
-  };
 
   // handle saving value when changing input value
   useEffect(() => {
@@ -32,6 +31,7 @@ export function Settings({
     setSettings(formSettings);
   }, [formSettings]);
 
+  // pause timer if its running
   useEffect(() => {
     if (typeof timerId === 'undefined') {
       return;
@@ -39,50 +39,32 @@ export function Settings({
     toggleTimer();
   }, []);
 
-  const FormInput = ({ name, label, type, value }) => {
-    return (
-      <label htmlFor={name}>
-        {label}
-        <input
-          type={type}
-          name={name}
-          id={name}
-          onBlur={(e) => handleChange(e)}
-          defaultValue={msToMm(value)}
-          // onChange={(e) => handleChange(e)}
-          // value={value}
-        />
-      </label>
-    );
-  };
-
   return (
-    <form>
-      <FormInput
+    <StyledForm className="SettingsForm">
+      <FormNumberInput
         name="workTime"
         label="Timer length"
-        type="number"
         value={formSettings.workTime}
+        setFormSetting={setFormSetting}
       />
-      <FormInput
+      <FormNumberInput
         name="restTime"
         label="Rest length"
-        type="number"
         value={formSettings.restTime}
+        setFormSetting={setFormSetting}
       />
-      <FormInput
+      <FormColorInput
         name="primary"
-        label="Primary Color"
-        type="text"
-        value={formSettings.restTime}
+        label="Color while working"
+        value={formSettings.colors.primary.light}
+        setFormSetting={setFormSetting}
       />
-      <FormInput
+      <FormColorInput
         name="secondary"
-        label="Secondary Color"
-        type="text"
-        value={formSettings.restTime}
+        label="Color while resting"
+        value={formSettings.colors.secondary.light}
+        setFormSetting={setFormSetting}
       />
-
       {/* <FormInput
         name="inFace"
         label="In your face mode"
@@ -93,6 +75,6 @@ export function Settings({
         label="Alert sound"
         value={formSettings.restTime}
       /> */}
-    </form>
+    </StyledForm>
   );
 }

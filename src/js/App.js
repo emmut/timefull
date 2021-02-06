@@ -56,6 +56,7 @@ export function App() {
     });
   }
 
+  // pauses timer at current time state
   function turnOffTimer() {
     // clear timer
     clearInterval(timerId);
@@ -64,6 +65,7 @@ export function App() {
     setStart(false);
   }
 
+  // toggles timer on and off
   function toggleTimer() {
     setStart(!isStarted);
     if (timerId) {
