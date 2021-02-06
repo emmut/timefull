@@ -123,10 +123,10 @@ export function App() {
               toggleTimer={toggleTimer}
               nextLap={nextLap}
               resetLap={resetLap}
+              isWorkTimer={isWorkTimer}
             />
           </Route>
           <Route path="/settings">
-            {/* TODO: pause timer */}
             <Settings
               settings={settings}
               setSettings={setSettings}

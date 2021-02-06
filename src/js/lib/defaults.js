@@ -6,21 +6,24 @@ const defaultSettings = {
   restTime: 300000, // rest time default setting
 
   colors: {
-    primary: '#fbb02d',
-    primaryDark: '',
-    secondary: '#63c132',
-    secondaryDark: ''
+    primary: {
+      light: '#fbb02d',
+      dark: ''
+    },
+    secondary: {
+      light: '#63c132',
+      dark: ''
+    }
+  },
+  set setPrimaryDarkColor(color) {
+    this.colors.primary.dark = shadeColor(color, -15);
+  },
+  set setSecondaryDarkColor(color) {
+    this.colors.secondary.dark = shadeColor(color, -15);
   }
 };
-
-// TODO: make prettier
-defaultSettings.colors.primaryDark = shadeColor(
-  defaultSettings.colors.primary,
-  -15
-);
-defaultSettings.colors.secondaryDark = shadeColor(
-  defaultSettings.colors.secondary,
-  -15
-);
+// generate dark variant
+defaultSettings.setPrimaryDarkColor = defaultSettings.colors.primary.light;
+defaultSettings.setSecondaryDarkColor = defaultSettings.colors.secondary.light;
 
 export { defaultSettings };
