@@ -35,7 +35,6 @@ export function FormColorInput({ name, label, value, setFormSetting }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleColorChange = (color, e) => {
-    // pauses the timer
     setFormSetting((prevSettings) => {
       return {
         ...prevSettings,
@@ -44,7 +43,7 @@ export function FormColorInput({ name, label, value, setFormSetting }) {
           [name]: {
             ...prevSettings.colors[name],
             light: color.hex,
-            dark: shadeColor(color.hex)
+            dark: shadeColor(color.hex, -15)
           }
         }
       };
