@@ -20,8 +20,8 @@ const Wrapper = styled.div`
 const PlayBtn = styled.button`
   display: grid;
   place-items: center;
-  color: var(--color-neutral);
-  background-color: var(--color-primary);
+  color: var(--color-dark-to-neutral);
+  background-color: var(--color-neutral-to-dark);
   width: 17rem;
   height: 17rem;
   border-radius: 100vh;
@@ -35,13 +35,39 @@ const StyledDisplaySettings = styled(DisplaySettings)`
   left: 50%;
   transform: translate(-50%);
 `;
+
+/**
+ * Circles
+ */
+const small = {
+  size: '25rem',
+  zIndex: -1
+};
+const large = {
+  size: '30rem',
+  zIndex: -2
+};
+const Circle = styled.div`
+  position: absolute;
+  display: block;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 100vh;
+  background-color: ${(props) => props.background};
+  z-index: ${(props) => (props.large ? large.zIndex : small.zIndex)};
+  width: ${(props) => (props.large ? large.size : small.size)};
+  height: ${(props) => (props.large ? large.size : small.size)};
+`;
+
 export function Home({
   settings,
   time,
   isStarted,
   toggleTimer,
   nextLap,
-  resetLap
+  resetLap,
+  isWorkTimer
 }) {
   return (
     <Timer>
@@ -51,6 +77,21 @@ export function Home({
           <FontAwesomeIcon icon={['fas', isStarted ? 'pause' : 'play']} />
         </PlayBtn>
         <TheTime time={time} />
+        <Circle
+          background={
+            isWorkTimer
+              ? settings.colors.primary.light
+              : settings.colors.secondary.light
+          }
+        />
+        <Circle
+          large
+          background={
+            isWorkTimer
+              ? settings.colors.primary.dark
+              : settings.colors.secondary.dark
+          }
+        />
         <button onClick={() => nextLap()}>
           <FontAwesomeIcon icon={['fas', 'forward']} />
         </button>

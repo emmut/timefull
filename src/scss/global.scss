@@ -11,14 +11,22 @@
   --color-secondary-dark: #968d68e1;
   --color-neutral: #f1f1f1;
   --color-text: #242323;
+  // light bg
   --background-color: var(--color-neutral);
+  // flip colors
+  --color-neutral-to-dark: var(--color-neutral);
+  --color-dark-to-neutral: var(--color-primary);
   @media (prefers-color-scheme: dark) {
     --color-primary: #7d378b;
     --color-primary-dark: #4d1a57;
     --color-secondary: #39304a;
     --color-secondary-dark: #202030;
     --color-text: #d4d4d4;
+    // dark mode bg
     --background-color: var(--color-secondary-dark);
+    // flipped!
+    --color-neutral-to-dark: var(--color-secondary);
+    --color-dark-to-neutral: var(--color-neutral);
   }
 }
 
@@ -83,8 +91,7 @@ small,
 }
 
 button,
-input[type='submit'],
-input[type='reset'] {
+input {
   background: none;
   color: inherit;
   border: none;
@@ -92,4 +99,10 @@ input[type='reset'] {
   font: inherit;
   cursor: pointer;
   outline: inherit;
+  -webkit-appearance: none;
+  // &::-webkit-outer-spin-button,
+  // &::-webkit-inner-spin-button {
+  //   -webkit-appearance: none;
+  //   margin: 0;
+  // }
 }
