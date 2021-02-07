@@ -38,4 +38,17 @@ const defaultColorsPicker = [
   '#ba68c8'
 ];
 
-export { defaultSettings, defaultColorsPicker };
+const notificationText = {
+  transitionToRest: {
+    title: 'Pause',
+    body: "It's time to pause",
+    sound: true
+  },
+  transitionToWork: {
+    title: 'Break has ended',
+    body: "It's time to go back to work",
+    sound: true
+  }
+};
+
+export { defaultSettings, defaultColorsPicker, notificationText };

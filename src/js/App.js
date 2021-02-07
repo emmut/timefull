@@ -16,7 +16,7 @@ import './plugins/fontawesome';
 import { isObjEmpty, localSetting } from './lib/helpers';
 
 // local storeage acces key
-import { defaultSettings } from './lib/defaults';
+import { defaultSettings, notificationText } from './lib/defaults';
 
 const Wrapper = styled.div`
   display: grid;
@@ -41,6 +41,7 @@ export function App() {
   const [isStarted, setStart] = useState(false);
   // timer type {work|rest}
   const [isWorkTimer, setWorkTimer] = useState(true);
+  const [notified, setNotified] = useState(undefined);
 
   function updateTime() {
     setTime((prevTime) => {
@@ -67,6 +68,8 @@ export function App() {
 
   // toggles timer on and off
   function toggleTimer() {
+    // make notifiable
+    setNotified(false);
     setStart(!isStarted);
     if (timerId) {
       turnOffTimer();
@@ -77,12 +80,14 @@ export function App() {
 
   // reset timer and set time to next lap
   function nextLap() {
+    setNotified(false);
     setWorkTimer(!isWorkTimer);
     turnOffTimer();
   }
 
   // reset current lap
   function resetLap() {
+    setNotified(false);
     setTime(isWorkTimer ? settings.workTime : settings.restTime);
   }
 
@@ -97,6 +102,16 @@ export function App() {
     // will be undefined on first render
     if (typeof settings === 'undefined') {
       return;
+    }
+    // prevents notification on pageload
+    if (typeof notified !== 'undefined' && !notified) {
+      // notify the user that the time is up
+      electron.notificationApi.sendNotification(
+        isWorkTimer
+          ? notificationText.transitionToRest
+          : notificationText.transitionToWork
+      );
+      setNotified(true);
     }
     setTime(isWorkTimer ? settings.workTime : settings.restTime);
   }, [isWorkTimer, settings]);
