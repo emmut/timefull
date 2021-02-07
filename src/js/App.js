@@ -18,6 +18,9 @@ import { isObjEmpty, localSetting } from './lib/helpers';
 // local storeage acces key
 import { defaultSettings, notificationText } from './lib/defaults';
 
+// testing workers
+import myWorker from './test.worker';
+
 const Wrapper = styled.div`
   display: grid;
   place-items: center;
@@ -42,6 +45,14 @@ export function App() {
   // timer type {work|rest}
   const [isWorkTimer, setWorkTimer] = useState(true);
   const [notified, setNotified] = useState(undefined);
+
+  const [count, setCount] = useState(0);
+
+  const worker = new myWorker();
+  useEffect(() => {
+    worker.postMessage(count);
+    worker.addEventListener('message', (event) => setCount(event.data));
+  }, []);
 
   function updateTime() {
     setTime((prevTime) => {
@@ -153,6 +164,7 @@ export function App() {
           </Route>
         </Switch>
         <Nav />
+        {count}
       </Router>
     </Wrapper>
   ) : (

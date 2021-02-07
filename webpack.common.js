@@ -18,14 +18,14 @@ module.exports = {
                 '@babel/preset-env',
                 {
                   targets: {
-                    esmodules: true,
-                  },
-                },
+                    esmodules: true
+                  }
+                }
               ],
-              '@babel/preset-react',
-            ],
-          },
-        },
+              '@babel/preset-react'
+            ]
+          }
+        }
       },
       {
         test: [/\.s[ac]ss$/i, /\.css$/i],
@@ -35,16 +35,20 @@ module.exports = {
           // Translates CSS into CommonJS
           'css-loader',
           // Compiles Sass to CSS
-          'sass-loader',
-        ],
+          'sass-loader'
+        ]
       },
-    ],
+      {
+        test: /\.worker\.js$/,
+        use: { loader: 'worker-loader' }
+      }
+    ]
   },
   resolve: {
-    extensions: ['.js'],
+    extensions: ['.js']
   },
   output: {
     filename: 'app.js',
-    path: path.resolve(__dirname, 'build', 'js'),
-  },
+    path: path.resolve(__dirname, 'build', 'js')
+  }
 };
