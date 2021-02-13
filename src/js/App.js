@@ -19,7 +19,7 @@ import { isObjEmpty, localSetting } from './lib/helpers';
 import { defaultSettings, notificationText } from './lib/defaults';
 
 // testing workers
-import myWorker from './test.worker';
+import timeWorker from './timer.worker';
 
 const Wrapper = styled.div`
   display: grid;
@@ -46,54 +46,56 @@ export function App() {
   const [isWorkTimer, setWorkTimer] = useState(true);
   const [notified, setNotified] = useState(undefined);
 
-  const [count, setCount] = useState(0);
-
-  const worker = new myWorker();
-  useEffect(() => {
-    worker.postMessage(count);
-    worker.addEventListener('message', (event) => setCount(event.data));
-  }, []);
-
-  function updateTime() {
-    setTime((prevTime) => {
-      // is timer active?
-      if (prevTime - 100 > 0) {
-        // subtract time
-        return prevTime - 100;
-      } else {
-        // the end
-        setWorkTimer(!isWorkTimer);
-        return undefined;
-      }
-    });
-  }
+  let worker;
 
   // pauses timer at current time state
-  function turnOffTimer() {
-    // clear timer
-    clearInterval(timerId);
-    // clear timer state
-    setTimerId(undefined);
-    setStart(false);
-  }
+  function turnOffTimer() {}
 
   // toggles timer on and off
   function toggleTimer() {
-    // make notifiable
-    setNotified(false);
     setStart(!isStarted);
-    if (timerId) {
-      turnOffTimer();
-      return;
-    }
-    setTimerId(setInterval(() => updateTime(), 100));
   }
 
+  useEffect(() => {
+    // worker.addEventListener('message', handleMessage);
+  }, []);
+
+  useEffect(
+    (worker) => {
+      if (isStarted) {
+        worker = new timeWorker();
+
+        worker.postMessage({ type: 'start', time });
+        worker.addEventListener('message', (event) => setTime(event.data.time));
+      } else {
+        worker = new timeWorker();
+
+        worker.postMessage({ type: 'stop' });
+        // worker.addEventListener('complete', () =>
+        //   console.log('complete from main thread')
+        // );
+      }
+    },
+    [isStarted]
+  );
+
+  function handleMessage(event) {
+    switch (event.data.type) {
+      case 'start':
+        handleStart();
+        break;
+      case 'stop':
+        handleStop();
+        break;
+      default:
+        break;
+    }
+  }
   // reset timer and set time to next lap
   function nextLap() {
     setNotified(false);
     setWorkTimer(!isWorkTimer);
-    turnOffTimer();
+    // turnOffTimer();
   }
 
   // reset current lap
@@ -164,7 +166,6 @@ export function App() {
           </Route>
         </Switch>
         <Nav />
-        {count}
       </Router>
     </Wrapper>
   ) : (
