@@ -2,6 +2,7 @@ export class Timer extends EventTarget {
   constructor() {
     super();
     this.time = undefined;
+    this.intervalId = undefined;
 
     // events
     this._complete = new Event('complete');
