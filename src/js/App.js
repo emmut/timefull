@@ -46,7 +46,15 @@ export function App() {
   const [isWorkTimer, setWorkTimer] = useState(true);
   const [notified, setNotified] = useState(undefined);
 
-  let worker;
+  const [worker, setWorker] = useState(undefined);
+
+  // set up webworker
+  useEffect(() => {
+    setWorker(new timeWorker());
+    return () => {
+      setWorker(undefined);
+    }
+  }, [])
 
   // pauses timer at current time state
   function turnOffTimer() {}
@@ -61,19 +69,21 @@ export function App() {
   }, []);
 
   useEffect(
-    (worker) => {
-      if (isStarted) {
-        worker = new timeWorker();
+    () => {
+      if (typeof worker !== 'undefined') {
+        if (isStarted) {
+          // worker = new timeWorker();
 
-        worker.postMessage({ type: 'start', time });
-        worker.addEventListener('message', (event) => setTime(event.data.time));
-      } else {
-        worker = new timeWorker();
+          worker.postMessage({ type: 'start', time });
+          worker.addEventListener('message', (event) => setTime(event.data.time));
+        } else {
+          // worker = new timeWorker();
 
-        worker.postMessage({ type: 'stop' });
-        // worker.addEventListener('complete', () =>
-        //   console.log('complete from main thread')
-        // );
+          worker.postMessage({ type: 'stop' });
+          // worker.addEventListener('complete', () =>
+          //   console.log('complete from main thread')
+          // );
+        }
       }
     },
     [isStarted]
