@@ -9,6 +9,9 @@ self.onmessage = (msg) => {
     case 'stop':
       handleStop();
       break;
+    case 'reset':
+      handleReset(msg.data.time);
+      break;
     default:
       // TODO: throw error
       break;
@@ -17,13 +20,13 @@ self.onmessage = (msg) => {
 
 function handleStart(time) {
   workerTimer.setTime = time;
-  console.log(workerTimer);
   workerTimer.start();
 }
 
 function handleStop() {
   workerTimer.stop();
-  workerTimer.addEventListener('complete', () => console.log('is completed'));
 }
 
-function handleReset() {}
+function handleReset(time) {
+  workerTimer.setTime = time;
+}

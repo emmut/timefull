@@ -14,8 +14,7 @@ export class Timer extends EventTarget {
 
   stop() {
     clearInterval(this.intervalId);
-    delete this.time;
-    this.dispatchEvent(this._complete);
+    delete this.intervalId;
   }
 
   start() {
@@ -28,9 +27,9 @@ export class Timer extends EventTarget {
         this.time -= 100;
         if (this.time <= 0) {
           this.stop();
-          self.postMessage({ time: undefined });
+          self.postMessage({ time: 0 });
+          this.dispatchEvent(this._complete);
         } else {
-          console.log(this.time);
           self.postMessage({ time: this.time });
         }
       }, 100);

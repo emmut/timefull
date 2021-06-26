@@ -38,14 +38,13 @@ export function App() {
   const [settings, setSettings] = useState(undefined);
   // time state in ms
   const [time, setTime] = useState(undefined);
-  // current interval id
-  const [timerId, setTimerId] = useState(null);
   // start timer flag
   const [isStarted, setStart] = useState(false);
   // timer type {work|rest}
   const [isWorkTimer, setWorkTimer] = useState(true);
+  // notification state
   const [notified, setNotified] = useState(undefined);
-
+  // time worker
   const [worker, setWorker] = useState(undefined);
 
   // set up webworker
@@ -53,71 +52,55 @@ export function App() {
     setWorker(new timeWorker());
     return () => {
       setWorker(undefined);
-    }
-  }, [])
+    };
+  }, []);
 
-  // pauses timer at current time state
-  function turnOffTimer() {}
+  useEffect(() => {
+    if (typeof worker !== 'undefined') {
+      if (isStarted) {
+        worker.postMessage({ type: 'start', time });
+        worker.addEventListener('message', (event) => setTime(event.data.time));
+      } else {
+        worker.postMessage({ type: 'stop' });
+      }
+    }
+  }, [isStarted]);
 
   // toggles timer on and off
   function toggleTimer() {
     setStart(!isStarted);
   }
 
-  useEffect(() => {
-    // worker.addEventListener('message', handleMessage);
-  }, []);
-
-  useEffect(
-    () => {
-      if (typeof worker !== 'undefined') {
-        if (isStarted) {
-          // worker = new timeWorker();
-
-          worker.postMessage({ type: 'start', time });
-          worker.addEventListener('message', (event) => setTime(event.data.time));
-        } else {
-          // worker = new timeWorker();
-
-          worker.postMessage({ type: 'stop' });
-          // worker.addEventListener('complete', () =>
-          //   console.log('complete from main thread')
-          // );
-        }
-      }
-    },
-    [isStarted]
-  );
-
-  function handleMessage(event) {
-    switch (event.data.type) {
-      case 'start':
-        handleStart();
-        break;
-      case 'stop':
-        handleStop();
-        break;
-      default:
-        break;
-    }
-  }
   // reset timer and set time to next lap
   function nextLap() {
     setNotified(false);
     setWorkTimer(!isWorkTimer);
-    // turnOffTimer();
+    worker.postMessage({ type: 'stop' });
   }
 
   // reset current lap
   function resetLap() {
     setNotified(false);
     setTime(isWorkTimer ? settings.workTime : settings.restTime);
+    worker.postMessage({ type: 'reset', time });
+  }
+
+  // pauses timer at current time state
+  function turnOffTimer() {
+    worker.postMessage({ type: 'stop' });
   }
 
   useEffect(() => {
     // the timer has reached the end
-    if (typeof time === 'undefined') {
+    console.log(time);
+    if (time === 0) {
       turnOffTimer();
+
+      electron.notificationApi.sendNotification(
+        isWorkTimer
+          ? notificationText.transitionToRest
+          : notificationText.transitionToWork
+      );
     }
   }, [time]);
 
@@ -167,12 +150,7 @@ export function App() {
             />
           </Route>
           <Route path="/settings">
-            <Settings
-              settings={settings}
-              setSettings={setSettings}
-              toggleTimer={toggleTimer}
-              timerId={timerId}
-            />
+            <Settings settings={settings} setSettings={setSettings} />
           </Route>
         </Switch>
         <Nav />

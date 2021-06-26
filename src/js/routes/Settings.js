@@ -14,12 +14,7 @@ const StyledForm = styled.form`
   width: 100%;
 `;
 
-export function Settings({
-  settings: prevSettings,
-  setSettings,
-  toggleTimer,
-  timerId
-}) {
+export function Settings({ settings: prevSettings, setSettings }) {
   const [formSettings, setFormSetting] = useState(prevSettings);
 
   // handle saving value when changing input value
@@ -30,14 +25,6 @@ export function Settings({
     // updates current state
     setSettings(formSettings);
   }, [formSettings]);
-
-  // pause timer if its running
-  useEffect(() => {
-    if (typeof timerId === 'undefined') {
-      return;
-    }
-    toggleTimer();
-  }, []);
 
   return (
     <StyledForm className="SettingsForm">
