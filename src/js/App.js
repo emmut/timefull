@@ -63,6 +63,7 @@ export function App() {
   // reset current lap
   function resetLap() {
     setStart(false);
+    setTime(isWorkTimer ? settings.workTime : settings.restTime);
   }
 
   // notify the user that the time is up
