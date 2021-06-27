@@ -2,23 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
 import styled from 'styled-components';
 
-// routes
+// Fontawesome
+import './plugins/fontawesome';
+
+// Routes
 import { Home } from './routes/Home';
 import { Settings } from './routes/Settings';
 
 // navigation
 import { Nav } from './components/Nav';
 
-// fontawesome
-import './plugins/fontawesome';
-
-// helpers
+// Helpers
 import { isObjEmpty, localSetting } from './lib/helpers';
 
-// local storeage acces key
+// Default settings and strings
 import { defaultSettings, notificationText } from './lib/defaults';
 
-// testing workers
+// Worker
 import timeWorker from './timer.worker';
 
 const Wrapper = styled.div`
@@ -40,34 +40,10 @@ export function App() {
   const [time, setTime] = useState(undefined);
   // start timer flag
   const [isStarted, setStart] = useState(false);
-  // timer type {work|rest}
+  // timer type
   const [isWorkTimer, setWorkTimer] = useState(true);
   // time worker
   const [worker, setWorker] = useState(undefined);
-
-  useEffect(() => {
-    // set up webworker
-    setWorker(new timeWorker());
-
-    // clean up
-    return () => {
-      worker.postMessage({ type: 'stop' });
-      worker.removeEventListener('message', handleTimeUpdate);
-      setWorker(undefined);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (typeof worker !== 'undefined') {
-      if (isStarted) {
-        worker.postMessage({ type: 'start', time });
-        worker.addEventListener('message', handleTimeUpdate);
-      } else {
-        worker.postMessage({ type: 'stop' });
-        worker.removeEventListener('message', handleTimeUpdate);
-      }
-    }
-  }, [isStarted]);
 
   function handleTimeUpdate(event) {
     setTime(event.data.time);
@@ -87,11 +63,10 @@ export function App() {
   // reset current lap
   function resetLap() {
     setStart(false);
-    setTime(isWorkTimer ? settings.workTime : settings.restTime);
   }
 
+  // notify the user that the time is up
   function sendNotification() {
-    // notify the user that the time is up
     electron.notificationApi.sendNotification(
       isWorkTimer
         ? notificationText.transitionToRest
@@ -100,26 +75,51 @@ export function App() {
   }
 
   useEffect(() => {
+    // Set up webworker
+    setWorker(new timeWorker());
+
+    // Clean up
+    return () => {
+      worker.postMessage({ type: 'stop' });
+      worker.removeEventListener('message', handleTimeUpdate);
+      setWorker(undefined);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof worker !== 'undefined') {
+      if (isStarted) {
+        worker.postMessage({ type: 'start', time });
+        worker.addEventListener('message', handleTimeUpdate);
+      } else {
+        worker.postMessage({ type: 'stop' });
+        worker.removeEventListener('message', handleTimeUpdate);
+      }
+    }
+  }, [isStarted]);
+
+  useEffect(() => {
+    // Timer has reached the end
     if (time === 0) {
       nextLap();
-      // the timer has reached the end
       sendNotification();
     }
   }, [time]);
 
+  // Setup time
   useEffect(() => {
-    // will be undefined on first render
+    // Will be undefined on first render
     if (typeof settings !== 'undefined') {
       // Update time to current setting
       setTime(isWorkTimer ? settings.workTime : settings.restTime);
     }
   }, [isWorkTimer, settings]);
 
-  // setup settings state
+  // Setup settings state
   useEffect(() => {
     const settings = localSetting.get();
     if (isObjEmpty(settings)) {
-      // set default settings
+      // Set default settings
       localSetting.set(defaultSettings);
       setSettings(defaultSettings);
     } else {

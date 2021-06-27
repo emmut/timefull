@@ -10,7 +10,7 @@ self.onmessage = (msg) => {
       handleStop();
       break;
     default:
-      // TODO: throw error
+      self.postMessage({ error: 'Worker error' });
       break;
   }
 };

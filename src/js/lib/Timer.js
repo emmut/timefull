@@ -1,11 +1,7 @@
-export class Timer extends EventTarget {
+export class Timer {
   constructor() {
-    super();
     this.time = undefined;
     this.intervalId = undefined;
-
-    // events
-    this._complete = new Event('complete');
   }
 
   set setTime(time) {
@@ -14,12 +10,11 @@ export class Timer extends EventTarget {
 
   stop() {
     clearInterval(this.intervalId);
-    delete this.intervalId;
+    this.intervalId = undefined;
   }
 
   start() {
     if (typeof this.time === 'undefined') {
-      //TODO: throw error
       return;
     }
     if (typeof this.intervalId === 'undefined') {
@@ -28,7 +23,6 @@ export class Timer extends EventTarget {
         if (this.time <= 0) {
           this.stop();
           self.postMessage({ time: 0 });
-          this.dispatchEvent(this._complete);
         } else {
           self.postMessage({ time: this.time });
         }
