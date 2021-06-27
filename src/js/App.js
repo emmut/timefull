@@ -42,8 +42,6 @@ export function App() {
   const [isStarted, setStart] = useState(false);
   // timer type {work|rest}
   const [isWorkTimer, setWorkTimer] = useState(true);
-  // notification state
-  const [notified, setNotified] = useState(undefined);
   // time worker
   const [worker, setWorker] = useState(undefined);
 
@@ -51,6 +49,8 @@ export function App() {
   useEffect(() => {
     setWorker(new timeWorker());
     return () => {
+      worker.postMessage({ type: 'stop' });
+      worker.removeEventListener('message', handleTimeUpdate);
       setWorker(undefined);
     };
   }, []);
@@ -59,12 +59,17 @@ export function App() {
     if (typeof worker !== 'undefined') {
       if (isStarted) {
         worker.postMessage({ type: 'start', time });
-        worker.addEventListener('message', (event) => setTime(event.data.time));
+        worker.addEventListener('message', handleTimeUpdate);
       } else {
         worker.postMessage({ type: 'stop' });
+        worker.removeEventListener('message', handleTimeUpdate);
       }
     }
   }, [isStarted]);
+
+  function handleTimeUpdate(event) {
+    setTime(event.data.time);
+  }
 
   // toggles timer on and off
   function toggleTimer() {
@@ -73,53 +78,41 @@ export function App() {
 
   // reset timer and set time to next lap
   function nextLap() {
-    setNotified(false);
+    setStart(false);
     setWorkTimer(!isWorkTimer);
     worker.postMessage({ type: 'stop' });
   }
 
   // reset current lap
   function resetLap() {
-    setNotified(false);
+    setStart(false);
     setTime(isWorkTimer ? settings.workTime : settings.restTime);
-    worker.postMessage({ type: 'reset', time });
-  }
-
-  // pauses timer at current time state
-  function turnOffTimer() {
     worker.postMessage({ type: 'stop' });
   }
 
-  useEffect(() => {
-    // the timer has reached the end
-    console.log(time);
-    if (time === 0) {
-      turnOffTimer();
+  function sendNotification() {
+    // notify the user that the time is up
+    electron.notificationApi.sendNotification(
+      isWorkTimer
+        ? notificationText.transitionToRest
+        : notificationText.transitionToWork
+    );
+  }
 
-      electron.notificationApi.sendNotification(
-        isWorkTimer
-          ? notificationText.transitionToRest
-          : notificationText.transitionToWork
-      );
+  useEffect(() => {
+    if (time === 0) {
+      nextLap();
+      // the timer has reached the end
+      sendNotification();
     }
   }, [time]);
 
   useEffect(() => {
     // will be undefined on first render
-    if (typeof settings === 'undefined') {
-      return;
+    if (typeof settings !== 'undefined') {
+      // Update time to current setting
+      setTime(isWorkTimer ? settings.workTime : settings.restTime);
     }
-    // prevents notification on pageload
-    if (typeof notified !== 'undefined' && !notified) {
-      // notify the user that the time is up
-      electron.notificationApi.sendNotification(
-        isWorkTimer
-          ? notificationText.transitionToRest
-          : notificationText.transitionToWork
-      );
-      setNotified(true);
-    }
-    setTime(isWorkTimer ? settings.workTime : settings.restTime);
   }, [isWorkTimer, settings]);
 
   // setup settings state

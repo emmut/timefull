@@ -9,9 +9,6 @@ self.onmessage = (msg) => {
     case 'stop':
       handleStop();
       break;
-    case 'reset':
-      handleReset(msg.data.time);
-      break;
     default:
       // TODO: throw error
       break;
@@ -25,8 +22,4 @@ function handleStart(time) {
 
 function handleStop() {
   workerTimer.stop();
-}
-
-function handleReset(time) {
-  workerTimer.setTime = time;
 }
