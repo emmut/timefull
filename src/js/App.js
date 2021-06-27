@@ -51,13 +51,13 @@ export function App() {
 
   // toggles timer on and off
   function toggleTimer() {
-    setStart(!isStarted);
+    setStart((prevStarted) => !prevStarted);
   }
 
   // reset timer and set time to next lap
   function nextLap() {
     setStart(false);
-    setWorkTimer(!isWorkTimer);
+    setWorkTimer((prevWorkTimer) => !prevWorkTimer);
   }
 
   // reset current lap
