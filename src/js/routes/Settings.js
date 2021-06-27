@@ -36,7 +36,7 @@ export function Settings({ settings: prevSettings, setSettings }) {
       />
       <FormNumberInput
         name="restTime"
-        label="Rest length"
+        label="Break length"
         value={formSettings.restTime}
         setFormSetting={setFormSetting}
       />
