@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 import { msToMm, handleFirstPayload } from '../lib/helpers';
-import { GlobalSettings } from '../lib/GlobalSettings';
 
 const StyledSettings = styled.div`
   width: 100%;
@@ -12,8 +11,6 @@ const StyledSettings = styled.div`
 `;
 
 export function DisplaySettings({ settings }) {
-  // const settings = handleFirstPayload(useContext(GlobalSettings));
-  // const settings = handleFirstPayload(prevSettings);
   return (
     <StyledSettings>
       <span className="text-large">
