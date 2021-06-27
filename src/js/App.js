@@ -45,8 +45,8 @@ export function App() {
   // time worker
   const [worker, setWorker] = useState(undefined);
 
-  // set up webworker
   useEffect(() => {
+    // set up webworker
     setWorker(new timeWorker());
     return () => {
       worker.postMessage({ type: 'stop' });
