@@ -18,6 +18,9 @@ import { isObjEmpty, localSetting } from './lib/helpers';
 // local storeage acces key
 import { defaultSettings, notificationText } from './lib/defaults';
 
+// testing workers
+import timeWorker from './timer.worker';
+
 const Wrapper = styled.div`
   display: grid;
   place-items: center;
@@ -35,85 +38,81 @@ export function App() {
   const [settings, setSettings] = useState(undefined);
   // time state in ms
   const [time, setTime] = useState(undefined);
-  // current interval id
-  const [timerId, setTimerId] = useState(null);
   // start timer flag
   const [isStarted, setStart] = useState(false);
   // timer type {work|rest}
   const [isWorkTimer, setWorkTimer] = useState(true);
-  const [notified, setNotified] = useState(undefined);
+  // time worker
+  const [worker, setWorker] = useState(undefined);
 
-  function updateTime() {
-    setTime((prevTime) => {
-      // is timer active?
-      if (prevTime - 100 > 0) {
-        // subtract time
-        return prevTime - 100;
+  // set up webworker
+  useEffect(() => {
+    setWorker(new timeWorker());
+    return () => {
+      worker.postMessage({ type: 'stop' });
+      worker.removeEventListener('message', handleTimeUpdate);
+      setWorker(undefined);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof worker !== 'undefined') {
+      if (isStarted) {
+        worker.postMessage({ type: 'start', time });
+        worker.addEventListener('message', handleTimeUpdate);
       } else {
-        // the end
-        setWorkTimer(!isWorkTimer);
-        return undefined;
+        worker.postMessage({ type: 'stop' });
+        worker.removeEventListener('message', handleTimeUpdate);
       }
-    });
-  }
+    }
+  }, [isStarted]);
 
-  // pauses timer at current time state
-  function turnOffTimer() {
-    // clear timer
-    clearInterval(timerId);
-    // clear timer state
-    setTimerId(undefined);
-    setStart(false);
+  function handleTimeUpdate(event) {
+    setTime(event.data.time);
   }
 
   // toggles timer on and off
   function toggleTimer() {
-    // make notifiable
-    setNotified(false);
     setStart(!isStarted);
-    if (timerId) {
-      turnOffTimer();
-      return;
-    }
-    setTimerId(setInterval(() => updateTime(), 100));
   }
 
   // reset timer and set time to next lap
   function nextLap() {
-    setNotified(false);
+    setStart(false);
     setWorkTimer(!isWorkTimer);
-    turnOffTimer();
+    worker.postMessage({ type: 'stop' });
   }
 
   // reset current lap
   function resetLap() {
-    setNotified(false);
+    setStart(false);
     setTime(isWorkTimer ? settings.workTime : settings.restTime);
+    worker.postMessage({ type: 'stop' });
+  }
+
+  function sendNotification() {
+    // notify the user that the time is up
+    electron.notificationApi.sendNotification(
+      isWorkTimer
+        ? notificationText.transitionToRest
+        : notificationText.transitionToWork
+    );
   }
 
   useEffect(() => {
-    // the timer has reached the end
-    if (typeof time === 'undefined') {
-      turnOffTimer();
+    if (time === 0) {
+      nextLap();
+      // the timer has reached the end
+      sendNotification();
     }
   }, [time]);
 
   useEffect(() => {
     // will be undefined on first render
-    if (typeof settings === 'undefined') {
-      return;
+    if (typeof settings !== 'undefined') {
+      // Update time to current setting
+      setTime(isWorkTimer ? settings.workTime : settings.restTime);
     }
-    // prevents notification on pageload
-    if (typeof notified !== 'undefined' && !notified) {
-      // notify the user that the time is up
-      electron.notificationApi.sendNotification(
-        isWorkTimer
-          ? notificationText.transitionToRest
-          : notificationText.transitionToWork
-      );
-      setNotified(true);
-    }
-    setTime(isWorkTimer ? settings.workTime : settings.restTime);
   }, [isWorkTimer, settings]);
 
   // setup settings state
@@ -144,12 +143,7 @@ export function App() {
             />
           </Route>
           <Route path="/settings">
-            <Settings
-              settings={settings}
-              setSettings={setSettings}
-              toggleTimer={toggleTimer}
-              timerId={timerId}
-            />
+            <Settings settings={settings} setSettings={setSettings} />
           </Route>
         </Switch>
         <Nav />
