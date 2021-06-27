@@ -48,6 +48,8 @@ export function App() {
   useEffect(() => {
     // set up webworker
     setWorker(new timeWorker());
+
+    // clean up
     return () => {
       worker.postMessage({ type: 'stop' });
       worker.removeEventListener('message', handleTimeUpdate);
@@ -80,14 +82,12 @@ export function App() {
   function nextLap() {
     setStart(false);
     setWorkTimer(!isWorkTimer);
-    worker.postMessage({ type: 'stop' });
   }
 
   // reset current lap
   function resetLap() {
     setStart(false);
     setTime(isWorkTimer ? settings.workTime : settings.restTime);
-    worker.postMessage({ type: 'stop' });
   }
 
   function sendNotification() {
