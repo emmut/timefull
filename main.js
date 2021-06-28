@@ -36,6 +36,10 @@ ipcMain.on('notify', (event, { title, body }) => {
   new Notification({ title, body }).show();
 });
 
+ipcMain.on('window-on-top', () => {
+  mainWindow.center();
+  mainWindow.show();
+});
 // // do close application when all windows are closed, except darwin
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

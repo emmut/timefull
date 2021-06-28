@@ -9,5 +9,10 @@ contextBridge.exposeInMainWorld('electron', {
   },
   sounds: {
     main: path.join(__dirname, 'sounds/notification.wav')
+  },
+  move: {
+    top: () => {
+      ipcRenderer.send('window-on-top');
+    }
   }
 });

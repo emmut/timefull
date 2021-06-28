@@ -79,6 +79,7 @@ export function App() {
       case 'end':
         nextLap();
         sendNotification();
+        electron.move.top();
         break;
     }
   }
