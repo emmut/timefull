@@ -45,10 +45,6 @@ export function App() {
   // time worker
   const [worker, setWorker] = useState(undefined);
 
-  function handleTimeUpdate(event) {
-    setTime(event.data.time);
-  }
-
   // toggles timer on and off
   function toggleTimer() {
     setStart((prevStarted) => !prevStarted);
@@ -75,37 +71,45 @@ export function App() {
     );
   }
 
+  function handleMessage(event) {
+    switch (event.data.event) {
+      case 'time':
+        setTime(event.data.time);
+        break;
+      case 'end':
+        nextLap();
+        sendNotification();
+        break;
+    }
+  }
+
   useEffect(() => {
     // Set up webworker
     setWorker(new timeWorker());
+  }, []);
 
-    // Clean up
+  useEffect(() => {
+    if (typeof worker === 'undefined') {
+      return;
+    }
+    worker.addEventListener('message', handleMessage);
+
     return () => {
       worker.postMessage({ type: 'stop' });
-      worker.removeEventListener('message', handleTimeUpdate);
+      worker.removeEventListener('message', handleMessage);
       setWorker(undefined);
     };
-  }, []);
+  }, [worker]);
 
   useEffect(() => {
     if (typeof worker !== 'undefined') {
       if (isStarted) {
         worker.postMessage({ type: 'start', time });
-        worker.addEventListener('message', handleTimeUpdate);
       } else {
         worker.postMessage({ type: 'stop' });
-        worker.removeEventListener('message', handleTimeUpdate);
       }
     }
   }, [isStarted]);
-
-  useEffect(() => {
-    // Timer has reached the end
-    if (time === 0) {
-      nextLap();
-      sendNotification();
-    }
-  }, [time]);
 
   // Setup time
   useEffect(() => {

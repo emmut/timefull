@@ -1,6 +1,6 @@
 export class Timer {
   constructor() {
-    this.time = undefined;
+    this.time = 0;
     this.intervalId = undefined;
   }
 
@@ -8,25 +8,22 @@ export class Timer {
     this.time = time;
   }
 
-  stop() {
-    clearInterval(this.intervalId);
-    this.intervalId = undefined;
-  }
-
   start() {
-    if (typeof this.time === 'undefined') {
-      return;
-    }
     if (typeof this.intervalId === 'undefined') {
       this.intervalId = setInterval(() => {
         this.time -= 100;
-        if (this.time <= 0) {
+        if (this.time === 0) {
           this.stop();
-          self.postMessage({ time: 0 });
+          self.postMessage({ event: 'end' });
         } else {
-          self.postMessage({ time: this.time });
+          self.postMessage({ event: 'time', time: this.time });
         }
       }, 100);
     }
+  }
+
+  stop() {
+    clearInterval(this.intervalId);
+    this.intervalId = undefined;
   }
 }
