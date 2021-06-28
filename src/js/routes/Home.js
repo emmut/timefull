@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { TheTime } from '../components/TheTime';
 import { DisplaySettings } from '../components/DisplaySettings';
 // font awesome
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 
 const Timer = styled.div`
   width: 100%;
@@ -74,7 +74,7 @@ export function Home({
       <Wrapper>
         <StyledDisplaySettings settings={settings} className="settings" />
         <PlayBtn onClick={() => toggleTimer()}>
-          <FontAwesomeIcon icon={['fas', isStarted ? 'pause' : 'play']} />
+          <Icon icon={['fas', isStarted ? 'pause' : 'play']} />
         </PlayBtn>
         <TheTime time={time} />
         <Circle
@@ -93,10 +93,10 @@ export function Home({
           }
         />
         <button onClick={() => nextLap()}>
-          <FontAwesomeIcon icon={['fas', 'forward']} />
+          <Icon icon={['fas', 'forward']} />
         </button>
         <button onClick={() => resetLap()}>
-          <FontAwesomeIcon icon={['fas', 'undo']} />
+          <Icon icon={['fas', 'undo']} />
         </button>
       </Wrapper>
     </Timer>
