@@ -33,11 +33,16 @@ if (isDev) {
 
 // notifications
 ipcMain.on('notify', (event, { title, body }) => {
-  new Notification({ title, body }).show();
+  const sound = path.join(__dirname, 'src/sounds/notification.wav');
+  new Notification({
+    title,
+    body,
+    sound,
+    silent: false
+  }).show();
 });
 
 ipcMain.on('window-on-top', () => {
-  mainWindow.center();
   mainWindow.show();
 });
 // // do close application when all windows are closed, except darwin
