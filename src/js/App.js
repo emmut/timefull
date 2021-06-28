@@ -83,24 +83,26 @@ export function App() {
     }
   }
 
+  // Set up webworker
   useEffect(() => {
-    // Set up webworker
     setWorker(new timeWorker());
   }, []);
 
+  // Set up worker event
   useEffect(() => {
-    if (typeof worker === 'undefined') {
-      return;
-    }
-    worker.addEventListener('message', handleMessage);
+    if (worker instanceof Worker) {
+      worker.addEventListener('message', handleMessage);
 
-    return () => {
-      worker.postMessage({ type: 'stop' });
-      worker.removeEventListener('message', handleMessage);
-      setWorker(undefined);
-    };
+      // Clean up worker event
+      return () => {
+        worker.postMessage({ type: 'stop' });
+        worker.removeEventListener('message', handleMessage);
+        setWorker(undefined);
+      };
+    }
   }, [worker]);
 
+  // Handle start/stop
   useEffect(() => {
     if (typeof worker !== 'undefined') {
       if (isStarted) {
@@ -110,15 +112,6 @@ export function App() {
       }
     }
   }, [isStarted]);
-
-  // Setup time
-  useEffect(() => {
-    // Will be undefined on first render
-    if (typeof settings !== 'undefined') {
-      // Update time to current setting
-      setTime(isWorkTimer ? settings.workTime : settings.restTime);
-    }
-  }, [isWorkTimer, settings]);
 
   // Setup settings state
   useEffect(() => {
@@ -131,6 +124,15 @@ export function App() {
       setSettings(settings);
     }
   }, []);
+
+  // Setup time setting
+  useEffect(() => {
+    // Will be undefined on first render
+    if (typeof settings !== 'undefined') {
+      // Update time to current setting
+      setTime(isWorkTimer ? settings.workTime : settings.restTime);
+    }
+  }, [isWorkTimer, settings]);
 
   return typeof settings !== 'undefined' ? (
     <Wrapper>
