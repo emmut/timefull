@@ -36,18 +36,18 @@ export function App() {
    * App level state
    */
   const [settings, setSettings] = useState(undefined);
-  // time state in ms
+  // Time state in ms
   const [time, setTime] = useState(undefined);
-  // start timer flag
+  // Start timer flag
   const [isStarted, setStart] = useState(false);
-  // timer type
+  // Timer type
   const [isWorkTimer, setWorkTimer] = useState(true);
-  // time worker
+  // Time worker
   const [worker, setWorker] = useState(undefined);
-  // notification state
+  // Notification state
   const [showNotification, setShowshowNotification] = useState(false);
 
-  // toggles timer on and off
+  // Toggles timer on and off
   function toggleTimer() {
     setStart((prevStarted) => !prevStarted);
   }
@@ -129,6 +129,7 @@ export function App() {
     }
   }, [isWorkTimer, settings]);
 
+  // Handle notifications
   useEffect(() => {
     if (showNotification) {
       electron.notificationApi.sendNotification(
