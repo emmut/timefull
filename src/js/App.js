@@ -44,6 +44,8 @@ export function App() {
   const [isWorkTimer, setWorkTimer] = useState(true);
   // time worker
   const [worker, setWorker] = useState(undefined);
+  // notification state
+  const [showNotification, setShowshowNotification] = useState(false);
 
   // toggles timer on and off
   function toggleTimer() {
@@ -62,15 +64,6 @@ export function App() {
     setTime(isWorkTimer ? settings.workTime : settings.restTime);
   }
 
-  // notify the user that the time is up
-  function sendNotification() {
-    electron.notificationApi.sendNotification(
-      isWorkTimer
-        ? notificationText.transitionToRest
-        : notificationText.transitionToWork
-    );
-  }
-
   function handleMessage(event) {
     switch (event.data.event) {
       case 'time':
@@ -78,7 +71,7 @@ export function App() {
         break;
       case 'end':
         nextLap();
-        sendNotification();
+        setShowshowNotification(true);
         electron.move.top();
         break;
     }
@@ -107,6 +100,7 @@ export function App() {
   useEffect(() => {
     if (typeof worker !== 'undefined') {
       if (isStarted) {
+        setShowshowNotification(false);
         worker.postMessage({ type: 'start', time });
       } else {
         worker.postMessage({ type: 'stop' });
@@ -134,6 +128,16 @@ export function App() {
       setTime(isWorkTimer ? settings.workTime : settings.restTime);
     }
   }, [isWorkTimer, settings]);
+
+  useEffect(() => {
+    if (showNotification) {
+      electron.notificationApi.sendNotification(
+        isWorkTimer
+          ? notificationText.transitionToWork
+          : notificationText.transitionToRest
+      );
+    }
+  }, [isWorkTimer, showNotification]);
 
   return typeof settings !== 'undefined' ? (
     <Wrapper>
