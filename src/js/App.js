@@ -39,7 +39,7 @@ export function App() {
   // Time state in ms
   const [time, setTime] = useState(undefined);
   // Start timer flag
-  const [isStarted, setStart] = useState(false);
+  const [isStarted, setIsStarted] = useState(false);
   // Timer type
   const [isWorkTimer, setWorkTimer] = useState(true);
   // Time worker
@@ -49,18 +49,18 @@ export function App() {
 
   // Toggles timer on and off
   function toggleTimer() {
-    setStart((prevStarted) => !prevStarted);
+    setIsStarted((prevStarted) => !prevStarted);
   }
 
   // reset timer and set time to next lap
   function nextLap() {
-    setStart(false);
+    setIsStarted(false);
     setWorkTimer((prevWorkTimer) => !prevWorkTimer);
   }
 
   // reset current lap
   function resetLap() {
-    setStart(false);
+    setIsStarted(false);
     setTime(isWorkTimer ? settings.workTime : settings.restTime);
   }
 
