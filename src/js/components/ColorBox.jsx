@@ -23,8 +23,16 @@ const StyledBlockPicker = styled.div`
 `;
 
 const StyledArrow = styled.div`
-  display: inline-block;
+  display: block;
+  width: 10px;
+  height: 5px;
 `;
+
+const StyledSvg = styled.svg`
+  height: 10px;
+  display: block;
+`;
+
 export function ColorBox({ value, handleColorChange }) {
   const node = useRef();
   const [open, setOpen] = useState(false);
