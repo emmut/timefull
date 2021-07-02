@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { shadeColor } from '../lib/helpers';
+import { shadeColor } from '../../lib/helpers';
 import { ColorBox } from './ColorBox';
 
 const StyledLabel = styled.label`

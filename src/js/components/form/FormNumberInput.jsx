@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { mmToMs, msToMm } from '../lib/helpers';
+import { mmToMs, msToMm } from '../../lib/helpers';
 
 const StyledInput = styled.input`
   margin-right: 0.5rem;

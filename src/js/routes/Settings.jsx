@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 // components
-import { FormColorInput } from '../components/FormColorInput';
-import { FormNumberInput } from '../components/FormNumberInput';
+import { FormColorInput } from '../components/form/FormColorInput';
+import { FormNumberInput } from '../components/form/FormNumberInput';
 
 import { localSetting } from '../lib/helpers';
 

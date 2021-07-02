@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
-import { defaultColorsPicker } from '../lib/defaults';
+import { defaultColorsPicker } from '../../lib/defaults';
 import { BlockPicker } from 'react-color';
 import { usePopper } from 'react-popper';
 
