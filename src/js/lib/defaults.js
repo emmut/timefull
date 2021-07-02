@@ -20,7 +20,10 @@ const defaultSettings = {
   },
   set setSecondaryDarkColor(color) {
     this.colors.secondary.dark = shadeColor(color, -15);
-  }
+  },
+
+  inFace: true,
+  alertSound: true
 };
 // generate dark variant
 defaultSettings.setPrimaryDarkColor = defaultSettings.colors.primary.light;

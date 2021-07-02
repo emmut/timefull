@@ -4,6 +4,7 @@ import styled from 'styled-components';
 // components
 import { FormColorInput } from '../components/form/FormColorInput';
 import { FormNumberInput } from '../components/form/FormNumberInput';
+import { FormInput } from '../components/form/FormInput';
 
 import { localSetting } from '../lib/helpers';
 
@@ -52,11 +53,13 @@ export function Settings({ settings: prevSettings, setSettings }) {
         value={formSettings.colors.secondary.light}
         setFormSetting={setFormSetting}
       />
-      {/* <FormInput
+      <FormInput
         name="inFace"
         label="In your face mode"
         type="checkbox"
-      /> */}
+        value={formSettings.inFace}
+        setFormSetting={setFormSetting}
+      />
       {/* <FormSelect
         name="sound"
         label="Alert sound"
