@@ -9,7 +9,7 @@
   "private": true,
   "scripts": {
     "start": "electron .",
-    "watch": "webpack --config webpack.common.js --watch",
+    "watch": "webpack --config webpack.common.js --watch --progress",
     "dev": "npm-run-all --parallel start watch"
   },
   "devDependencies": {
