@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { defaultColorsPicker } from '../lib/defaults';
 import { BlockPicker } from 'react-color';
 import { usePopper } from 'react-popper';
@@ -22,15 +22,41 @@ const StyledBlockPicker = styled.div`
   z-index: 10;
 `;
 
-const StyledArrow = styled.div`
-  display: block;
-  width: 10px;
-  height: 5px;
+const arrowCommon = css`
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: inherit;
 `;
 
-const StyledSvg = styled.svg`
-  height: 10px;
-  display: block;
+const StyledArrow = styled.div`
+  ${arrowCommon}
+  visibility: hidden;
+  background: #fff;
+
+  &:before {
+    ${arrowCommon}
+    visibility: visible;
+    content: '';
+    transform: rotate(45deg);
+    box-shadow: inherit;
+  }
+
+  [data-popper-placement^='top'] > & {
+    bottom: -4px;
+    box-shadow: rgba(1, 1, 1, 0.1) 0px 1px;
+  }
+
+  [data-popper-placement^='bottom'] > & {
+    top: -4px;
+    z-index: -10;
+    box-shadow: rgba(1, 1, 1, 0.1) 0px -1px;
+    ${(props) =>
+      props.color &&
+      css`
+        background: ${props.color};
+      `}
+  }
 `;
 
 export function ColorBox({ value, handleColorChange }) {
@@ -48,7 +74,9 @@ export function ColorBox({ value, handleColorChange }) {
       },
       {
         name: 'offset',
-        options: [0, 0]
+        options: {
+          offset: [0, 8]
+        }
       }
     ]
   });
@@ -74,6 +102,8 @@ export function ColorBox({ value, handleColorChange }) {
     };
   }, [open]);
 
+  useEffect(() => {});
+
   return (
     <>
       <StyledBoxWrapper ref={node}>
@@ -96,11 +126,7 @@ export function ColorBox({ value, handleColorChange }) {
               triangle="hide"
               onChangeComplete={(color, e) => handleColorChange(color, e)}
             />
-            <StyledArrow ref={setArrow} style={styles.arrow}>
-              <svg viewBox="0 0 10 10" width="10" height="10">
-                <path fill="currentColor" d="M0 0 10 0 5 10 0 0"></path>
-              </svg>
-            </StyledArrow>
+            <StyledArrow color={value} ref={setArrow} style={styles.arrow} />
           </StyledBlockPicker>
         )}
       </StyledBoxWrapper>
