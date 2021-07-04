@@ -10,7 +10,8 @@
   "scripts": {
     "start": "electron .",
     "watch": "webpack --config webpack.common.js --watch --progress",
-    "dev": "npm-run-all --parallel start watch"
+    "dev": "npm-run-all --parallel start watch",
+    "debug": "npm-run-all --parallel 'start --inspect' watch"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
