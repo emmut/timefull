@@ -41,6 +41,13 @@ module.exports = {
       {
         test: /\.worker\.js$/,
         use: { loader: 'worker-loader' }
+      },
+      {
+        test: /\.mp3$/,
+        use: 'file-loader',
+        query: {
+          name: 'sounds/[name].[hash:8].[ext]'
+        }
       }
     ]
   },

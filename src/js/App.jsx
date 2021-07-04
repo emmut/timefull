@@ -16,7 +16,8 @@ import { Nav } from './components/Nav';
 import { isObjEmpty, localSetting } from './lib/helpers';
 
 // Default settings and strings
-import { defaultSettings, notificationText } from './lib/defaults';
+import { defaultSettings } from './lib/defaults';
+import microcopy from './lib/microcopy.json';
 
 // Worker
 import timeWorker from './timer.worker';
@@ -133,9 +134,7 @@ export function App() {
   useEffect(() => {
     if (showNotification) {
       electron.notificationApi.sendNotification(
-        isWorkTimer
-          ? notificationText.transitionToWork
-          : notificationText.transitionToRest
+        isWorkTimer ? microcopy.transitionToWork : microcopy.transitionToRest
       );
     }
   }, [isWorkTimer, showNotification]);
