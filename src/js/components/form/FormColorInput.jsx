@@ -34,6 +34,7 @@ export function FormColorInput({ name, label, value, setFormSetting }) {
             value={value}
             name={name}
             handleColorChange={handleColorChange}
+            setFormSettings={setFormSettings}
           />
         </div>
       </StyledLabel>

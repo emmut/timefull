@@ -5,10 +5,10 @@ const StyledInput = styled.input`
   display: block;
 `;
 
-export function FormInput({ name, type, label, value, setFormSetting }) {
+export function FormInput({ name, type, label, value, setFormSettings }) {
   // handel form input
   const handleChange = (e) => {
-    setFormSetting((prevSettings) => {
+    setFormSettings((prevSettings) => {
       return {
         ...prevSettings,
         [e.target.name]: handleValue(e.target)

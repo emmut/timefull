@@ -12,11 +12,11 @@ const StyledInput = styled.input`
   height: 2.5rem;
 `;
 
-export const FormNumberInput = ({ name, label, value, setFormSetting }) => {
+export const FormNumberInput = ({ name, label, value, setFormSettings }) => {
   // handel form input
   const handleChange = (e) => {
     // pauses the timer
-    setFormSetting((prevSettings) => {
+    setFormSettings((prevSettings) => {
       return {
         ...prevSettings,
         [e.target.name]: mmToMs(e.target.value)

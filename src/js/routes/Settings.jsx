@@ -16,7 +16,7 @@ const StyledForm = styled.form`
 `;
 
 export function Settings({ settings: prevSettings, setSettings }) {
-  const [formSettings, setFormSetting] = useState(prevSettings);
+  const [formSettings, setFormSettings] = useState(prevSettings);
 
   // handle saving value when changing input value
   useEffect(() => {
@@ -33,32 +33,32 @@ export function Settings({ settings: prevSettings, setSettings }) {
         name="workTime"
         label="Timer length"
         value={formSettings.workTime}
-        setFormSetting={setFormSetting}
+        setFormSettings={setFormSettings}
       />
       <FormNumberInput
         name="restTime"
         label="Break length"
         value={formSettings.restTime}
-        setFormSetting={setFormSetting}
+        setFormSettings={setFormSettings}
       />
       <FormColorInput
         name="primary"
         label="Color while working"
         value={formSettings.colors.primary.light}
-        setFormSetting={setFormSetting}
+        setFormSettings={setFormSettings}
       />
       <FormColorInput
         name="secondary"
         label="Color while resting"
         value={formSettings.colors.secondary.light}
-        setFormSetting={setFormSetting}
+        setFormSettings={setFormSettings}
       />
       <FormInput
         name="inFace"
         label="In your face mode"
         type="checkbox"
         value={formSettings.inFace}
-        setFormSetting={setFormSetting}
+        setFormSettings={setFormSettings}
       />
       {/* <FormSelect
         name="sound"
