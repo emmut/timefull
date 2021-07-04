@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { defaultColorsPicker } from '../../lib/defaults';
+import { shadeColor } from '../../lib/helpers';
 import { BlockPicker } from 'react-color';
 import { usePopper } from 'react-popper';
 
@@ -51,15 +52,11 @@ const StyledArrow = styled.div`
     top: -4px;
     z-index: -10;
     box-shadow: rgba(1, 1, 1, 0.1) 0px -1px;
-    ${(props) =>
-      props.color &&
-      css`
-        background: ${props.color};
-      `}
+    background-color: currentColor; // from inline style
   }
 `;
 
-export function ColorBox({ value, handleColorChange }) {
+export function ColorBox({ value, name, setFormSettings, setColor }) {
   const node = useRef();
   const [open, setOpen] = useState(false);
   // popper
@@ -80,6 +77,22 @@ export function ColorBox({ value, handleColorChange }) {
       }
     ]
   });
+
+  const handleColorChange = (hex) => {
+    setFormSettings((prevSettings) => {
+      return {
+        ...prevSettings,
+        colors: {
+          ...prevSettings.colors,
+          [name]: {
+            ...prevSettings.colors[name],
+            light: hex,
+            dark: shadeColor(hex, -15)
+          }
+        }
+      };
+    });
+  };
 
   const handleClickOutside = (e) => {
     if (node.current.contains(e.target)) {
@@ -102,8 +115,6 @@ export function ColorBox({ value, handleColorChange }) {
     };
   }, [open]);
 
-  useEffect(() => {});
-
   return (
     <>
       <StyledBoxWrapper ref={node}>
@@ -124,9 +135,13 @@ export function ColorBox({ value, handleColorChange }) {
               colors={defaultColorsPicker}
               color={value}
               triangle="hide"
-              onChangeComplete={(color, e) => handleColorChange(color, e)}
+              onChangeComplete={(color) => handleColorChange(color.hex)}
             />
-            <StyledArrow color={value} ref={setArrow} style={styles.arrow} />
+            <StyledArrow
+              arrowColor={value}
+              ref={setArrow}
+              style={{ ...styles.arrow, color: value }}
+            />
           </StyledBlockPicker>
         )}
       </StyledBoxWrapper>
