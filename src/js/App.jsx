@@ -19,6 +19,10 @@ import { isObjEmpty, localSetting } from './lib/helpers';
 import { defaultSettings } from './lib/defaults';
 import microcopy from './lib/microcopy.json';
 
+// Sound
+import plong from '../sounds/plong.mp3';
+const plongAudio = new Audio(plong);
+
 // Worker
 import timeWorker from './timer.worker';
 
@@ -36,7 +40,6 @@ export function App() {
   /**
    * App level state
    */
-  const [settings, setSettings] = useState(undefined);
   // Time state in ms
   const [time, setTime] = useState(undefined);
   // Start timer flag
@@ -46,7 +49,10 @@ export function App() {
   // Time worker
   const [worker, setWorker] = useState(undefined);
   // Notification state
-  const [showNotification, setShowshowNotification] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+
+  // Settings
+  const [settings, setSettings] = useState(undefined);
 
   // Toggles timer on and off
   function toggleTimer() {
@@ -71,9 +77,17 @@ export function App() {
         setTime(event.data.time);
         break;
       case 'end':
-        nextLap();
-        setShowshowNotification(true);
-        electron.move.top();
+        {
+          nextLap();
+          setShowNotification(true);
+          const settings = localSetting.get();
+          if (settings.inFace) {
+            electron.move.top();
+          }
+          if (settings.alertSound) {
+            plongAudio.play();
+          }
+        }
         break;
     }
   }
@@ -101,7 +115,7 @@ export function App() {
   useEffect(() => {
     if (typeof worker !== 'undefined') {
       if (isStarted) {
-        setShowshowNotification(false);
+        setShowNotification(false);
         worker.postMessage({ type: 'start', time });
       } else {
         worker.postMessage({ type: 'stop' });

@@ -60,6 +60,13 @@ export function Settings({ settings: prevSettings, setSettings }) {
         value={formSettings.inFace}
         setFormSettings={setFormSettings}
       />
+      <FormInput
+        name="alertSound"
+        label="Use alert sound"
+        type="checkbox"
+        value={formSettings.alertSound}
+        setFormSettings={setFormSettings}
+      />
       {/* <FormSelect
         name="sound"
         label="Alert sound"

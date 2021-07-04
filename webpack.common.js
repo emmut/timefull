@@ -44,8 +44,8 @@ module.exports = {
       },
       {
         test: /\.mp3$/,
-        use: 'file-loader',
-        query: {
+        loader: 'file-loader',
+        options: {
           name: 'sounds/[name].[hash:8].[ext]'
         }
       }
