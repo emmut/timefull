@@ -82,12 +82,21 @@ h5 {
 }
 
 small,
-.text_small {
+.text-small {
   font-size: 0.8rem;
 }
 
 .text-large {
   @extend h1;
+}
+
+.font {
+  &-mono {
+    font-family: 'Roboto Mono';
+  }
+  &-light {
+    font-weight: 100;
+  }
 }
 
 button,

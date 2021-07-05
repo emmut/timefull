@@ -50,7 +50,6 @@ export function App() {
   const [worker, setWorker] = useState(undefined);
   // Notification state
   const [showNotification, setShowNotification] = useState(false);
-
   // Settings
   const [settings, setSettings] = useState(undefined);
 

@@ -32,7 +32,7 @@ export function TheTime({ time }) {
   }
 
   return (
-    <Time className="text-large">
+    <Time className="text-large font-mono font-light">
       <TheTime time={time} />
     </Time>
   );

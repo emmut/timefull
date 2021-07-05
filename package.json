@@ -43,6 +43,7 @@
     "react-router-dom": "^5.2.0",
     "reset-css": "^5.0.1",
     "styled-components": "^5.2.1",
+    "url-loader": "^4.1.1",
     "webfontloader": "^1.6.28",
     "worker-loader": "^3.0.7"
   }

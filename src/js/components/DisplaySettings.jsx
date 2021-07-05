@@ -13,11 +13,11 @@ const StyledSettings = styled.div`
 export function DisplaySettings({ settings }) {
   return (
     <StyledSettings>
-      <span className="text-large">
+      <span className="text-large font-mono">
         {settings.workTime && msToMm(settings.workTime)}
       </span>
-      <span className="text-large">&#183;</span>
-      <span className="text-large">
+      <span className="text-large font-mono">&#183;</span>
+      <span className="text-large font-mono">
         {settings.restTime && msToMm(settings.restTime)}
       </span>
     </StyledSettings>

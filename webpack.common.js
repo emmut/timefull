@@ -48,6 +48,13 @@ module.exports = {
         options: {
           name: 'sounds/[name].[hash:8].[ext]'
         }
+      },
+      {
+        test: /\.(woff|woff2|ttf)$/,
+        loader: 'url-loader',
+        options: {
+          limit: 1000
+        }
       }
     ]
   },
