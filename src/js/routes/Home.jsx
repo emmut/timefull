@@ -4,6 +4,8 @@ import styled from 'styled-components';
 // components
 import { TheTime } from '../components/TheTime';
 import { DisplaySettings } from '../components/DisplaySettings';
+import { StyledShadow } from '../lib/styles';
+
 // font awesome
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 
@@ -13,20 +15,24 @@ const Timer = styled.div`
   display: grid;
   place-items: center;
 `;
+
 const Wrapper = styled.div`
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column nowrap;
 `;
 
 const PlayBtn = styled.button`
-  display: grid;
-  place-items: center;
   color: var(--color-dark-to-neutral);
   background-color: var(--color-neutral-to-dark);
   width: 17rem;
   height: 17rem;
   border-radius: 100vh;
-  margin-top: 0.7rem;
+  margin: 0.7rem 0;
   font-size: 7rem;
+  ${StyledShadow}
 `;
 
 const StyledDisplaySettings = styled(DisplaySettings)`
@@ -34,6 +40,24 @@ const StyledDisplaySettings = styled(DisplaySettings)`
   top: -2rem;
   left: 50%;
   transform: translate(-50%);
+`;
+
+const StyledButton = styled.button`
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-neutral);
+  border-radius: 100vh;
+  width: 3rem;
+  height: 3rem;
+  ${StyledShadow};
+`;
+
+const StyledButtons = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0 0 1rem;
 `;
 
 /**
@@ -74,7 +98,10 @@ export function Home({
       <Wrapper>
         <StyledDisplaySettings settings={settings} className="settings" />
         <PlayBtn onClick={() => toggleTimer()}>
-          <Icon icon={['fas', isStarted ? 'pause' : 'play']} />
+          <Icon
+            icon={['fas', isStarted ? 'pause' : 'play']}
+            style={{ transform: isStarted ? '' : 'translateX(10px)' }}
+          />
         </PlayBtn>
         <TheTime time={time} />
         <Circle
@@ -92,12 +119,14 @@ export function Home({
               : settings.colors.secondary.dark
           }
         />
-        <button onClick={() => nextLap()}>
-          <Icon icon={['fas', 'forward']} />
-        </button>
-        <button onClick={() => resetLap()}>
-          <Icon icon={['fas', 'undo']} />
-        </button>
+        <StyledButtons>
+          <StyledButton onClick={() => nextLap()}>
+            <Icon icon={['fas', 'forward']} />
+          </StyledButton>
+          <StyledButton onClick={() => resetLap()}>
+            <Icon icon={['fas', 'undo']} />
+          </StyledButton>
+        </StyledButtons>
       </Wrapper>
     </Timer>
   );

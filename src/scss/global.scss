@@ -81,13 +81,17 @@ h5 {
   font-size: 1.25rem;
 }
 
-small,
-.text-small {
+small {
   font-size: 0.8rem;
 }
 
-.text-large {
-  @extend h1;
+.text {
+  &-small {
+    @extend small;
+  }
+  &-large {
+    @extend h1;
+  }
 }
 
 .font {
@@ -95,7 +99,7 @@ small,
     font-family: 'Roboto Mono';
   }
   &-light {
-    font-weight: 100;
+    font-weight: 200;
   }
 }
 
@@ -114,4 +118,17 @@ input {
   //   -webkit-appearance: none;
   //   margin: 0;
   // }
+}
+
+@mixin hover-shadow {
+  --shadow-distance: 1px 1px;
+  --shadow-blur: 1px;
+  box-shadow: var(--shadow-distance) var(--shadow-blur) rgba(0, 0, 0, 0.2);
+
+  &:focus,
+  &:hover {
+    transition: box-shadow 200ms ease-in-out;
+    --shadow-distance: 2px 2px;
+    --shadow-blur: 2px;
+  }
 }
