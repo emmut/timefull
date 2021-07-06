@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { TheTime } from '../components/TheTime';
 import { DisplaySettings } from '../components/DisplaySettings';
 import { StyledShadow } from '../lib/styles';
-
+import { Morph } from '../components/morph-circles/Morph';
 // font awesome
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 
@@ -104,7 +104,7 @@ export function Home({
           />
         </PlayBtn>
         <TheTime time={time} />
-        <Circle
+        {/* <Circle
           background={
             isWorkTimer
               ? settings.colors.primary.light
@@ -118,7 +118,7 @@ export function Home({
               ? settings.colors.primary.dark
               : settings.colors.secondary.dark
           }
-        />
+        /> */}
         <StyledButtons>
           <StyledButton onClick={() => nextLap()}>
             <Icon icon={['fas', 'forward']} />
@@ -127,6 +127,8 @@ export function Home({
             <Icon icon={['fas', 'undo']} />
           </StyledButton>
         </StyledButtons>
+
+        <Morph settings={settings} />
       </Wrapper>
     </Timer>
   );
