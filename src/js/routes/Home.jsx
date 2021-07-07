@@ -9,6 +9,8 @@ import { Morph } from '../components/morph-circles/Morph';
 // font awesome
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 
+import { paths } from '../lib/defaults';
+
 const Timer = styled.div`
   width: 100%;
   height: 100%;
@@ -32,14 +34,12 @@ const PlayBtn = styled.button`
   border-radius: 100vh;
   margin: 0.7rem 0;
   font-size: 7rem;
+  z-index: 10;
   ${StyledShadow}
 `;
 
-const StyledDisplaySettings = styled(DisplaySettings)`
-  position: absolute;
-  top: -2rem;
-  left: 50%;
-  transform: translate(-50%);
+const StyledDisplaySettings = styled.div`
+  z-index: 10;
 `;
 
 const StyledButton = styled.button`
@@ -60,28 +60,8 @@ const StyledButtons = styled.div`
   margin: 0 0 1rem;
 `;
 
-/**
- * Circles
- */
-const small = {
-  size: '25rem',
-  zIndex: -1
-};
-const large = {
-  size: '30rem',
-  zIndex: -2
-};
-const Circle = styled.div`
+const StyledMorph = styled.div`
   position: absolute;
-  display: block;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 100vh;
-  background-color: ${(props) => props.background};
-  z-index: ${(props) => (props.large ? large.zIndex : small.zIndex)};
-  width: ${(props) => (props.large ? large.size : small.size)};
-  height: ${(props) => (props.large ? large.size : small.size)};
 `;
 
 export function Home({
@@ -96,7 +76,31 @@ export function Home({
   return (
     <Timer>
       <Wrapper>
-        <StyledDisplaySettings settings={settings} className="settings" />
+        <StyledMorph>
+          <Morph
+            paths={paths.primary}
+            color={
+              isWorkTimer
+                ? settings.colors.primary.light
+                : settings.colors.secondary.light
+            }
+            delay={200}
+            large
+          />
+        </StyledMorph>
+        <StyledMorph>
+          <Morph
+            paths={paths.secondary}
+            color={
+              isWorkTimer
+                ? settings.colors.primary.dark
+                : settings.colors.secondary.dark
+            }
+          />
+        </StyledMorph>
+        <StyledDisplaySettings>
+          <DisplaySettings settings={settings} className="settings" />
+        </StyledDisplaySettings>
         <PlayBtn onClick={() => toggleTimer()}>
           <Icon
             icon={['fas', isStarted ? 'pause' : 'play']}
@@ -104,21 +108,6 @@ export function Home({
           />
         </PlayBtn>
         <TheTime time={time} />
-        {/* <Circle
-          background={
-            isWorkTimer
-              ? settings.colors.primary.light
-              : settings.colors.secondary.light
-          }
-        />
-        <Circle
-          large
-          background={
-            isWorkTimer
-              ? settings.colors.primary.dark
-              : settings.colors.secondary.dark
-          }
-        /> */}
         <StyledButtons>
           <StyledButton onClick={() => nextLap()}>
             <Icon icon={['fas', 'forward']} />
@@ -127,21 +116,6 @@ export function Home({
             <Icon icon={['fas', 'undo']} />
           </StyledButton>
         </StyledButtons>
-
-        <Morph
-          color={
-            isWorkTimer
-              ? settings.colors.primary.light
-              : settings.colors.secondary.light
-          }
-        />
-        <Morph
-          color={
-            isWorkTimer
-              ? settings.colors.primary.dark
-              : settings.colors.secondary.dark
-          }
-        />
       </Wrapper>
     </Timer>
   );
