@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { TheTime } from '../components/TheTime';
 import { DisplaySettings } from '../components/DisplaySettings';
 import { StyledShadow } from '../lib/styles';
-import { Morph } from '../components/morph-circles/Morph';
+import { Morph } from '../components/Morph';
 // font awesome
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 

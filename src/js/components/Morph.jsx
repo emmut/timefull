@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { SvgBase } from '../../lib/svg';
+import { SvgBase } from '../lib/svg';
 import { useSpring, animated, useSpringRef } from 'react-spring';
 
 const Svg = styled(SvgBase)`
