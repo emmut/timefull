@@ -128,7 +128,20 @@ export function Home({
           </StyledButton>
         </StyledButtons>
 
-        <Morph settings={settings} />
+        <Morph
+          color={
+            isWorkTimer
+              ? settings.colors.primary.light
+              : settings.colors.secondary.light
+          }
+        />
+        <Morph
+          color={
+            isWorkTimer
+              ? settings.colors.primary.dark
+              : settings.colors.secondary.dark
+          }
+        />
       </Wrapper>
     </Timer>
   );
