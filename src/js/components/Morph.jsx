@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { SvgBase } from '../lib/svg';
 import { useSpring, animated, useSpringRef } from 'react-spring';
@@ -8,7 +8,7 @@ const Svg = styled(SvgBase)`
   width: ${({ large }) => (large ? '800px' : '600px')};
 `;
 
-export function Morph({ paths, color, large, delay }) {
+export function Morph({ paths, color, large, delay, isStarted }) {
   const springRef = useSpringRef();
 
   const { x } = useSpring({
@@ -26,7 +26,7 @@ export function Morph({ paths, color, large, delay }) {
   const { o } = useSpring({
     ref: springRef,
     loop: { reverse: true },
-    config: { duration: 500000 },
+    config: { duration: 400000 },
     from: {
       o: 0
     },
@@ -36,10 +36,17 @@ export function Morph({ paths, color, large, delay }) {
     delay
   });
 
-  useEffect(() => {
-    // Start morph and spinn
+  function start() {
     springRef.current?.forEach((ref) => ref.start());
-  }, []);
+  }
+
+  function stop() {
+    springRef.current?.forEach((ref) => ref.stop());
+  }
+
+  useEffect(() => {
+    isStarted ? start() : stop();
+  }, [isStarted]);
 
   return (
     <animated.div

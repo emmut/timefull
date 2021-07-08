@@ -86,6 +86,7 @@ export function Home({
             }
             delay={200}
             large
+            isStarted={isStarted}
           />
         </StyledMorph>
         <StyledMorph>
@@ -96,6 +97,7 @@ export function Home({
                 ? settings.colors.primary.dark
                 : settings.colors.secondary.dark
             }
+            isStarted={isStarted}
           />
         </StyledMorph>
         <StyledDisplaySettings>
