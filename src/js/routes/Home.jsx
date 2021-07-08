@@ -50,6 +50,7 @@ const StyledButton = styled.button`
   border-radius: 100vh;
   width: 3rem;
   height: 3rem;
+  z-index: 10;
   ${StyledShadow};
 `;
 
